@@ -4,7 +4,9 @@
  */
 package model;
 
+import dao.ProductDAO;
 import java.text.NumberFormat;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -19,12 +21,12 @@ public class Product {
     private double price;
     private int quantityInStock;
     private Category category;
-    private String image;
+    private List<String> image;
 
     public Product() {
     }
 
-    public Product(int productID, String name, String description, double price, int quantityInStock, Category category, String image) {
+    public Product(int productID, String name, String description, double price, int quantityInStock, Category category, List<String> image) {
         this.productID = productID;
         this.name = name;
         this.description = description;
@@ -33,6 +35,8 @@ public class Product {
         this.category = category;
         this.image = image;
     }
+
+    
 
     // Hàm này trả về giá đã định dạng
     public String getFormattedPrice() {
@@ -88,17 +92,23 @@ public class Product {
         this.category = category;
     }
 
-    public String getImage() {
+    public List<String> getImageToCreate() {
         return image;
     }
 
-    public void setImage(String image) {
+    public void setImageToCreate(List<String> image) {
         this.image = image;
     }
 
     @Override
     public String toString() {
         return "Product{" + "productID=" + productID + ", name=" + name + ", description=" + description + ", price=" + price + ", quantityInStock=" + quantityInStock + ", category=" + category + ", image=" + image + '}';
+    }
+
+    public List<String> getImage() {
+        ProductDAO dao = new ProductDAO();
+        image = dao.getImageByProductID(productID);
+        return image;
     }
 
 }

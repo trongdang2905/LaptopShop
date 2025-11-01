@@ -24,6 +24,8 @@ import model.Product;
 @WebServlet(name = "ShowProductServlet", urlPatterns = {"/product"})
 public class ShowProductServlet extends HttpServlet {
 
+    private static final int PAGE_SIZE = 12;
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -62,12 +64,31 @@ public class ShowProductServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        ProductDAO productDao = new ProductDAO();
-        List<Product> listProduct = productDao.getAllProduct();
+        int page = 1;
+        String pageParam = request.getParameter("page");
+        if (pageParam != null) {
+            page = Integer.parseInt(pageParam);
+        }
+
+        ProductDAO dao = new ProductDAO();
+
+        // Lấy tổng số sản phẩm để tính số trang
+        int totalProducts = dao.countProduct();
+        int totalPages = (int) Math.ceil((double) totalProducts / PAGE_SIZE);
+
+        // Lấy sản phẩm cho trang hiện tại
+        List<Product> products = dao.getProductByPage((page - 1) * PAGE_SIZE, PAGE_SIZE);
+
+        request.setAttribute("product", products);
+        request.setAttribute("currentPage", page);
+        request.setAttribute("totalPages", totalPages);
+
+        List<Product> listProduct = dao.getAllProduct();
         CategoryDAO cateDao = new CategoryDAO();
         List<Category> listCategory = cateDao.getAllCategory();
+        int size = listProduct.size();
+        request.setAttribute("size", size);
         request.setAttribute("category", listCategory);
-        request.setAttribute("product", listProduct);
         request.getRequestDispatcher("index.jsp").forward(request, response);
     }
 
