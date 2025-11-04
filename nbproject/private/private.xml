@@ -4,20 +4,32 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/D:/FPT/Fall_2025/PRJ301/Project/LaptopShop/web/product-detail.jsp</file>
+            <file>file:/D:/FPT/Fall_2025/PRJ301/Project/LaptopShop/src/java/dao/TokenDAO.java</file>
+            <file>file:/D:/FPT/Fall_2025/PRJ301/Project/LaptopShop/web/register-employee.jsp</file>
             <file>file:/D:/FPT/Fall_2025/PRJ301/Project/LaptopShop/src/java/controller/GetProductDashBoard.java</file>
             <file>file:/D:/FPT/Fall_2025/PRJ301/Project/LaptopShop/src/java/model/Account.java</file>
             <file>file:/D:/FPT/Fall_2025/PRJ301/Project/LaptopShop/web/dashboard-add-product.jsp</file>
             <file>file:/D:/FPT/Fall_2025/PRJ301/Project/LaptopShop/web/dashboard.jsp</file>
+            <file>file:/D:/FPT/Fall_2025/PRJ301/Project/LaptopShop/web/employee-handle-order.jsp</file>
             <file>file:/D:/FPT/Fall_2025/PRJ301/Project/LaptopShop/src/java/controller/SearchProductServlet.java</file>
+            <file>file:/D:/FPT/Fall_2025/PRJ301/Project/LaptopShop/web/profile.jsp</file>
+            <file>file:/D:/FPT/Fall_2025/PRJ301/Project/LaptopShop/src/java/controller/UpdateProfileServlet.java</file>
+            <file>file:/D:/FPT/Fall_2025/PRJ301/Project/LaptopShop/src/java/filter/AdminFilter.java</file>
             <file>file:/D:/FPT/Fall_2025/PRJ301/Project/LaptopShop/src/java/controller/AddProductServlet.java</file>
             <file>file:/D:/FPT/Fall_2025/PRJ301/Project/LaptopShop/web/register.jsp</file>
             <file>file:/D:/FPT/Fall_2025/PRJ301/Project/LaptopShop/src/java/dao/AccountDAO.java</file>
+            <file>file:/D:/FPT/Fall_2025/PRJ301/Project/LaptopShop/web/list-employee.jsp</file>
             <file>file:/D:/FPT/Fall_2025/PRJ301/Project/LaptopShop/src/java/model/Customer.java</file>
             <file>file:/D:/FPT/Fall_2025/PRJ301/Project/LaptopShop/src/java/controller/LoginCustomerServlet.java</file>
+            <file>file:/D:/FPT/Fall_2025/PRJ301/Project/LaptopShop/src/java/controller/LogoutCustomerServlet.java</file>
+            <file>file:/D:/FPT/Fall_2025/PRJ301/Project/LaptopShop/src/java/dao/EmployeeDAO.java</file>
+            <file>file:/D:/FPT/Fall_2025/PRJ301/Project/LaptopShop/src/java/model/Employee.java</file>
             <file>file:/D:/FPT/Fall_2025/PRJ301/Project/LaptopShop/src/java/controller/RegisterCustomerServlet.java</file>
             <file>file:/D:/FPT/Fall_2025/PRJ301/Project/LaptopShop/src/java/controller/ShowProductServlet.java</file>
+            <file>file:/D:/FPT/Fall_2025/PRJ301/Project/LaptopShop/src/java/filter/AuthFilter.java</file>
             <file>file:/D:/FPT/Fall_2025/PRJ301/Project/LaptopShop/web/dashboard-update-product.jsp</file>
             <file>file:/D:/FPT/Fall_2025/PRJ301/Project/LaptopShop/src/java/controller/DashBoardSearch.java</file>
+            <file>file:/D:/FPT/Fall_2025/PRJ301/Project/LaptopShop/src/java/filter/EmployeeFilter.java</file>
             <file>file:/D:/FPT/Fall_2025/PRJ301/Project/LaptopShop/web/login.jsp</file>
             <file>file:/D:/FPT/Fall_2025/PRJ301/Project/LaptopShop/src/java/controller/GetCategoryServlet.java</file>
             <file>file:/D:/FPT/Fall_2025/PRJ301/Project/LaptopShop/src/java/model/Category.java</file>
@@ -29,9 +41,12 @@
             <file>file:/D:/FPT/Fall_2025/PRJ301/Project/LaptopShop/web/register-success.jsp</file>
             <file>file:/D:/FPT/Fall_2025/PRJ301/Project/LaptopShop/src/java/model/Product.java</file>
             <file>file:/D:/FPT/Fall_2025/PRJ301/Project/LaptopShop/web/dashboard-product.jsp</file>
+            <file>file:/D:/FPT/Fall_2025/PRJ301/Project/LaptopShop/web/WEB-INF/web.xml</file>
             <file>file:/D:/FPT/Fall_2025/PRJ301/Project/LaptopShop/src/java/dao/CategoryDAO.java</file>
             <file>file:/D:/FPT/Fall_2025/PRJ301/Project/LaptopShop/src/java/controller/ProductDetailServlet.java</file>
+            <file>file:/D:/FPT/Fall_2025/PRJ301/Project/LaptopShop/web/page-not-found.jsp</file>
             <file>file:/D:/FPT/Fall_2025/PRJ301/Project/LaptopShop/src/java/dao/CustomerDAO.java</file>
+            <file>file:/D:/FPT/Fall_2025/PRJ301/Project/LaptopShop/src/java/controller/RegisterEmployeeServlet.java</file>
         </group>
     </open-files>
 </project-private>

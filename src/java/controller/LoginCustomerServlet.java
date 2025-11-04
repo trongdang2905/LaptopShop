@@ -5,15 +5,21 @@
 package controller;
 
 import dao.AccountDAO;
+import dao.CustomerDAO;
+import dao.EmployeeDAO;
+import dao.TokenDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.UUID;
 import model.Account;
+import model.Customer;
 import org.mindrot.jbcrypt.BCrypt;
 
 /**
@@ -77,6 +83,7 @@ public class LoginCustomerServlet extends HttpServlet {
             throws ServletException, IOException {
 
         AccountDAO accDao = new AccountDAO();
+        CustomerDAO cusDao = new CustomerDAO();
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         String msg = "";
@@ -91,9 +98,32 @@ public class LoginCustomerServlet extends HttpServlet {
             boolean correctPass = BCrypt.checkpw(password, account.getPassWord());
             //Kiểm tra có đúng pass không?
             if (correctPass) {
-                HttpSession session = request.getSession();
-                session.setAttribute("accountCustomer", account);
-                response.sendRedirect("product");
+                if (account.getRoleID() == 1) {
+                    HttpSession session = request.getSession();
+                    Customer customer = cusDao.getCustomerByEmail(email);
+                    // Đặt session của thông tin user và account
+                    session.setAttribute("infoCustomer", customer);
+                    session.setAttribute("accountCustomer", account);
+                    // Tạo token và cookies của username để lưu đăng nhập
+                    String token = UUID.randomUUID().toString();
+                    TokenDAO.saveToken(token, email);
+                    Cookie cookie = new Cookie("auth-token", token);
+                    cookie.setHttpOnly(true);
+                    cookie.setSecure(true);
+                    cookie.setMaxAge(60*60*24*7);
+                    response.addCookie(cookie);
+                    response.sendRedirect("product");
+                } else if (account.getRoleID() == 2) {
+                    HttpSession session = request.getSession();
+                    session.setAttribute("accountAdmin", account);
+                    response.sendRedirect("dashboard.jsp");
+                } else if (account.getRoleID() == 3) {
+                    HttpSession session = request.getSession();
+                    EmployeeDAO empDao = new EmployeeDAO();
+                    session.setAttribute("infoEmployee", empDao.getEmployeeByEmail(email));
+                    session.setAttribute("accountEmployee", account);
+                    response.sendRedirect("employee-handle-order.jsp");
+                }
             } else {
                 msg = "Account not existed!";
                 request.setAttribute("accountNotFound", msg);

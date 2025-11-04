@@ -5,6 +5,7 @@
 package model;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 /**
  *
@@ -17,12 +18,12 @@ public class Account {
     private String passWord;
     private int roleID;
     private boolean isActive;
-    private Date date;
+    private Timestamp date;
 
     public Account() {
     }
 
-    public Account(int accountID, String userName, String passWord, int roleID, boolean isActive, Date date) {
+    public Account(int accountID, String userName, String passWord, int roleID, boolean isActive, Timestamp date) {
         this.accountID = accountID;
         this.userName = userName;
         this.passWord = passWord;
@@ -71,11 +72,11 @@ public class Account {
         this.isActive = isActive;
     }
 
-    public Date getDate() {
+    public Timestamp getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(Timestamp date) {
         this.date = date;
     }
 

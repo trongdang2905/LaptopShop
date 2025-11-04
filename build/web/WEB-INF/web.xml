@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="6.0" xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
+    
+    
+    
+    <filter>
+        <filter-name>AuthFilter</filter-name>
+        <filter-class>filter.AuthFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AuthFilter</filter-name>
+        <url-pattern>/index.jsp</url-pattern>
+        <url-pattern>/product-detail.jsp</url-pattern>
+        <url-pattern>/category</url-pattern>
+        <url-pattern>/product-detail</url-pattern>
+        <url-pattern>/search</url-pattern>
+        <url-pattern>/product</url-pattern>
+        <url-pattern>/profile.jsp</url-pattern>
+        <url-pattern>/profile</url-pattern>
+    </filter-mapping>
+    
+    <filter>
+        <filter-name>EmployeeFilter</filter-name>
+        <filter-class>filter.EmployeeFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>EmployeeFilter</filter-name>
+        <url-pattern>/employee-handle-order.jsp</url-pattern>
+        
+    </filter-mapping>
+    
+    <filter>
+        <filter-name>AdminFilter</filter-name>
+        <filter-class>filter.AdminFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AdminFilter</filter-name>
+        <url-pattern>/dashboard-add-product.jsp</url-pattern>
+        <url-pattern>/dashboard-product.jsp</url-pattern>
+        <url-pattern>/dashboard-update-product.jsp</url-pattern>
+        <url-pattern>/dashboard.jsp</url-pattern>
+        <url-pattern>/list-employee.jsp</url-pattern>
+        <url-pattern>/add-product</url-pattern>
+        <url-pattern>/dashboard-search</url-pattern>
+        <url-pattern>/delete-product</url-pattern>
+        <url-pattern>/edit-product</url-pattern>
+        <url-pattern>/dashboard-product</url-pattern>
+        <url-pattern>/register-employee</url-pattern>
+    </filter-mapping>
+    
+</web-app>

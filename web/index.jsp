@@ -184,16 +184,109 @@
                 align-items: center;
             }
 
-            .cart-icon, .login-btn {
+            .cart-icon, .login-btn, .user-menu {
                 background: rgba(255, 255, 255, 0.15);
                 padding: 8px 16px;
                 border-radius: 20px;
                 cursor: pointer;
                 transition: background 0.3s;
+                position: relative;
             }
 
-            .cart-icon:hover, .login-btn:hover {
+            .cart-icon:hover, .login-btn:hover, .user-menu:hover {
                 background: rgba(255, 255, 255, 0.25);
+            }
+
+            /* User Menu Dropdown */
+            .user-menu {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+
+            .user-avatar {
+                width: 32px;
+                height: 32px;
+                border-radius: 50%;
+                background: white;
+                color: #d32f2f;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: bold;
+                font-size: 14px;
+            }
+
+            .user-dropdown {
+                position: absolute;
+                top: 100%;
+                right: 0;
+                background: white;
+                min-width: 280px;
+                border-radius: 8px;
+                box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+                opacity: 0;
+                visibility: hidden;
+                transform: translateY(-10px);
+                transition: all 0.3s ease;
+                margin-top: 10px;
+                z-index: 1000;
+            }
+
+            .user-menu:hover .user-dropdown {
+                opacity: 1;
+                visibility: visible;
+                transform: translateY(0);
+            }
+
+            .user-dropdown-header {
+                padding: 20px;
+                border-bottom: 1px solid #f0f0f0;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                border-radius: 8px 8px 0 0;
+            }
+
+            .user-dropdown-name {
+                font-size: 16px;
+                font-weight: 600;
+                margin-bottom: 5px;
+            }
+
+            .user-dropdown-email {
+                font-size: 13px;
+                opacity: 0.9;
+            }
+
+            .user-dropdown-item {
+                padding: 12px 20px;
+                color: #333;
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                transition: all 0.2s;
+                border-bottom: 1px solid #f0f0f0;
+                text-decoration: none;
+            }
+
+            .user-dropdown-item:last-child {
+                border-bottom: none;
+                border-radius: 0 0 8px 8px;
+            }
+
+            .user-dropdown-item:hover {
+                background: #f8f8f8;
+                padding-left: 25px;
+            }
+
+            .user-dropdown-item.logout {
+                color: #d32f2f;
+                font-weight: 600;
+            }
+
+            .user-dropdown-icon {
+                width: 20px;
+                font-size: 16px;
             }
 
             /* Hero Banner */
@@ -797,7 +890,56 @@
                 </div>
                 <div class="header-actions">
                     <div class="cart-icon">🛒 Giỏ hàng</div>
-                    <div class="login-btn" onclick="changeToLogin()">👤 Đăng nhập</div>
+                    <!-- Check if user is logged in -->
+                    <c:choose>
+                        <c:when test="${sessionScope.accountCustomer != null && sessionScope.infoCustomer !=null}">
+                            <!-- User Menu (when logged in) -->
+                            <div class="user-menu">
+                                <div class="user-avatar">
+                                    ${sessionScope.accountCustomer.userName.substring(0,1).toUpperCase()}
+                                </div>
+                                <span>${sessionScope.infoCustomer.fullName}</span> ▼
+
+                                <div class="user-dropdown">
+                                    <div class="user-dropdown-header">
+                                        <div class="user-dropdown-name">${sessionScope.infoCustomer.fullName}</div>
+                                        <div class="user-dropdown-email">${sessionScope.accountCustomer.userName}</div>
+                                    </div>
+
+                                    <a href="profile.jsp" class="user-dropdown-item">
+                                        <span class="user-dropdown-icon">👤</span>
+                                        <span>Thông tin tài khoản</span>
+                                    </a>
+
+                                    <a href="orders.jsp" class="user-dropdown-item">
+                                        <span class="user-dropdown-icon">📦</span>
+                                        <span>Đơn hàng của tôi</span>
+                                    </a>
+
+                                    
+
+                                    <a href="addresses.jsp" class="user-dropdown-item">
+                                        <span class="user-dropdown-icon">📍</span>
+                                        <span>Địa chỉ giao hàng</span>
+                                    </a>
+
+                                    <a href="settings.jsp" class="user-dropdown-item">
+                                        <span class="user-dropdown-icon">⚙️</span>
+                                        <span>Cài đặt</span>
+                                    </a>
+
+                                    <a href="logout" class="user-dropdown-item logout" onclick="return confirm('Bạn có chắc muốn đăng xuất?')">
+                                        <span class="user-dropdown-icon">🚪</span>
+                                        <span>Đăng xuất</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </c:when>
+                        <c:otherwise>
+                            <!-- Login Button (when not logged in) -->
+                            <div class="login-btn" onclick="changeToLogin()">👤 Đăng nhập</div>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
             </div>
         </header>
@@ -986,7 +1128,7 @@
                 window.location.href = "category?id=" + id + "#product-section";
             }
         }
-        
+
         function changeToLogin() {
             window.location.href = "login.jsp";
         }
@@ -1011,7 +1153,7 @@
         function scrollToProduct() {
             document.getElementById("product-section").scrollIntoView({behavior: "smooth"});
         }
-        
+
 
     </script>
 </html>

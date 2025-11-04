@@ -4,7 +4,6 @@
  */
 package controller;
 
-import dao.AccountDAO;
 import dao.CustomerDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,19 +12,17 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.mindrot.jbcrypt.BCrypt;
+import jakarta.servlet.http.HttpSession;
 import java.sql.Date;
-import java.time.LocalDate;
 import model.Account;
 import model.Customer;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
+
 /**
  *
  * @author trong
  */
-@WebServlet(name = "RegisterCustomerServlet", urlPatterns = {"/register-customer"})
-public class RegisterCustomerServlet extends HttpServlet {
+@WebServlet(name = "UpdateProfileServlet", urlPatterns = {"/update-profile"})
+public class UpdateProfileServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -44,10 +41,10 @@ public class RegisterCustomerServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet RegisterCustomerServlet</title>");
+            out.println("<title>Servlet UpdateProfileServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet RegisterCustomerServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet UpdateProfileServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -79,41 +76,24 @@ public class RegisterCustomerServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        AccountDAO accDao = new AccountDAO();
-        CustomerDAO cusDao = new CustomerDAO();
-        LocalDateTime now = LocalDateTime.now(); 
-        String name = request.getParameter("fullname");
-        String phone = request.getParameter("phone");
+        String name = request.getParameter("fullName");
+        String date = request.getParameter("date");
         String email = request.getParameter("email");
-        String dateOfBirth = request.getParameter("dateofbirth");
+        String phone = request.getParameter("phone");
         String address = request.getParameter("address");
-        String password = request.getParameter("password");
-        String confirmPassword = request.getParameter("confirmPassword");
-        String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
-        String msg = "";
-        // Kiểm tra password và confirm password có giống nhau không?
-        if (!password.isEmpty() && !confirmPassword.isEmpty()) {
-            if (!password.equals(confirmPassword)) {
-                msg = "Password is not the same!";
-                request.setAttribute("differencePassword", msg);
-                request.getRequestDispatcher("register.jsp").forward(request, response);
-                return;
-            }
+        HttpSession session = request.getSession();
+        Account account = (Account) session.getAttribute("accountCustomer");
+        // Tạo customer rồi update ở CustomerDao
+        if (account != null) {
+            CustomerDAO cusDao = new CustomerDAO();
+            Customer customer = new Customer(0, account, name, email, phone, address, Date.valueOf(date));
+            cusDao.updateCustomer(customer);
+            request.setAttribute("success", "success");
+            request.getRequestDispatcher("profile.jsp").forward(request, response);
+        }else {
+            request.setAttribute("fail", "fail");
+            request.getRequestDispatcher("profile.jsp").forward(request, response);
         }
-
-        // Kiểm tra email đã có trong Account hay chưa?, nếu có thì trả về thông báo email tồn tại
-        if (accDao.getAccountByEmail(email) != null) {
-            msg = "Account is existed!";
-            request.setAttribute("existedAccount", msg);
-            request.getRequestDispatcher("register.jsp").forward(request, response);
-        } // Nếu chưa thì tạo mới Account sau đó tạo Customer
-        else {
-            Account account = new Account(0, email, hashedPassword, 1, true, Timestamp.valueOf(now));
-            Customer customer = new Customer(0, accDao.getAccountByEmail(email), name, email, phone, address, Date.valueOf(dateOfBirth));
-            cusDao.addCustomer(customer, account);
-            response.sendRedirect("register-success.jsp");
-        }
-        // Tạo thành công thì đi đến trang Success
     }
 
     /**

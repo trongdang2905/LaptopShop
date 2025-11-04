@@ -290,7 +290,7 @@
                 padding: 16px 20px;
                 border-radius: 12px;
                 margin-bottom: 25px;
-                display: none;
+
                 align-items: center;
                 gap: 12px;
                 font-size: 14px;
@@ -298,6 +298,24 @@
             }
 
             .success-message.show {
+                display: flex;
+            }
+
+            .fail-message {
+                background: rgba(239, 68, 68, 0.1);
+                border: 1px solid rgba(239, 68, 68, 0.3);
+                color: #ef4444;
+                padding: 16px 20px;
+                border-radius: 12px;
+                margin-bottom: 25px;
+                
+                align-items: center;
+                gap: 12px;
+                font-size: 14px;
+                font-weight: 500;
+            }
+
+            .fail-message.show {
                 display: flex;
             }
 
@@ -387,11 +405,19 @@
                 <h2>Create New Employee 👔</h2>
                 <p>Add a new employee to your team</p>
             </div>
+            <c:if test="${success != null}">
+                <div class="success-message" id="successMessage">
+                    <span style="font-size: 20px;">✓</span>
+                    <span>Employee created successfully!</span>
+                </div>
+            </c:if>
 
-            <div class="success-message" id="successMessage">
-                <span style="font-size: 20px;">✓</span>
-                <span>Employee created successfully!</span>
-            </div>
+            <c:if test="${existedAccount != null}">
+                <div class="fail-message" id="failMessage">
+                    <span style="font-size: 20px;">⚠️</span>
+                    <span>Email existed!</span>
+                </div>
+            </c:if>
 
             <div class="form-container">
                 <form id="employeeForm" action="register-employee" method="post">
@@ -454,11 +480,6 @@
                             <select class="form-select" id="department" name="department" required>
                                 <option value="">Select Department</option>
                                 <option value="Sales">Sales</option>
-                                <option value="Marketing">Marketing</option>
-                                <option value="IT">IT & Technical Support</option>
-                                <option value="HR">Human Resources</option>
-                                <option value="Finance">Finance & Accounting</option>
-                                <option value="Operations">Operations</option>
                                 <option value="Customer Service">Customer Service</option>
                                 <option value="Management">Management</option>
                             </select>
@@ -595,47 +616,7 @@
                 e.target.value = value;
             });
 
-            // Form submission
-            form.addEventListener('submit', (e) => {
-                e.preventDefault();
-
-                // Validate all fields
-                let isFormValid = true;
-                inputs.forEach(input => {
-                    if (!validateField(input)) {
-                        isFormValid = false;
-                    }
-                });
-
-                if (isFormValid) {
-                    // Get form data
-                    const formData = {
-                        fullname: document.getElementById('fullname').value.trim(),
-                        email: document.getElementById('email').value.trim(),
-                        phone: document.getElementById('phone').value.trim(),
-                        department: document.getElementById('department').value,
-                        hiredate: document.getElementById('hiredate').value,
-                        salary: document.getElementById('salary').value
-                    };
-
-                    console.log('Employee Data:', formData);
-
-                    // Show success message
-                    successMessage.classList.add('show');
-                    window.scrollTo({top: 0, behavior: 'smooth'});
-
-                    // Reset form
-                    form.reset();
-
-                    // Hide success message after 5 seconds
-                    setTimeout(() => {
-                        successMessage.classList.remove('show');
-                    }, 5000);
-
-                    // In a real application, you would send this data to your backend
-                    // Example: fetch('/api/employees', { method: 'POST', body: JSON.stringify(formData) })
-                }
-            });
+            );
         </script>
     </body>
 </html>
