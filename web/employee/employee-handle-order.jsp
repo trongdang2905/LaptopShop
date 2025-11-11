@@ -640,7 +640,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link" onclick="logout()">
+                    <a href="../logout" class="nav-link" onclick="logout()">
                         <span>🚪</span>
                         <span>Logout</span>
                     </a>

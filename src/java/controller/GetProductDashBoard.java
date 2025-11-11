@@ -89,7 +89,7 @@ public class GetProductDashBoard extends HttpServlet {
         int size = listProduct.size();
         request.setAttribute("size", size);
         request.setAttribute("category", listCategory);
-        request.getRequestDispatcher("dashboard-product.jsp").forward(request, response);
+        request.getRequestDispatcher("admin/dashboard-product.jsp").forward(request, response);
     }
 
     /**

@@ -15,7 +15,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.mindrot.jbcrypt.BCrypt;
 import java.sql.Date;
-import java.time.LocalDate;
 import model.Account;
 import model.Customer;
 import java.sql.Timestamp;
@@ -96,7 +95,7 @@ public class RegisterCustomerServlet extends HttpServlet {
             if (!password.equals(confirmPassword)) {
                 msg = "Password is not the same!";
                 request.setAttribute("differencePassword", msg);
-                request.getRequestDispatcher("register.jsp").forward(request, response);
+                request.getRequestDispatcher("common/register.jsp").forward(request, response);
                 return;
             }
         }
@@ -105,13 +104,13 @@ public class RegisterCustomerServlet extends HttpServlet {
         if (accDao.getAccountByEmail(email) != null) {
             msg = "Account is existed!";
             request.setAttribute("existedAccount", msg);
-            request.getRequestDispatcher("register.jsp").forward(request, response);
+            request.getRequestDispatcher("common/register.jsp").forward(request, response);
         } // Nếu chưa thì tạo mới Account sau đó tạo Customer
         else {
             Account account = new Account(0, email, hashedPassword, 1, true, Timestamp.valueOf(now));
             Customer customer = new Customer(0, accDao.getAccountByEmail(email), name, email, phone, address, Date.valueOf(dateOfBirth));
             cusDao.addCustomer(customer, account);
-            response.sendRedirect("register-success.jsp");
+            response.sendRedirect("common/register-success.jsp");
         }
         // Tạo thành công thì đi đến trang Success
     }

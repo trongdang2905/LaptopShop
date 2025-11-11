@@ -492,21 +492,7 @@
                 }
             });
 
-            // Show success/error message if exists in URL params
-            window.addEventListener('load', function () {
-                const urlParams = new URLSearchParams(window.location.search);
-                if (urlParams.get('success') === 'true') {
-                    document.getElementById('successMessage').style.display = 'block';
-                    setTimeout(() => {
-                        document.getElementById('successMessage').style.display = 'none';
-                    }, 5000);
-                } else if (urlParams.get('error') === 'true') {
-                    document.getElementById('errorMessage').style.display = 'block';
-                    setTimeout(() => {
-                        document.getElementById('errorMessage').style.display = 'none';
-                    }, 5000);
-                }
-            });
+            );
         </script>
     </body>
 </html>

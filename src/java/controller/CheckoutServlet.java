@@ -4,8 +4,6 @@
  */
 package controller;
 
-import dao.CategoryDAO;
-import dao.ProductDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -13,17 +11,24 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import java.io.BufferedReader;
 import java.util.List;
-import java.util.Random;
-import model.Category;
-import model.Product;
+import java.util.Map;
+import java.util.stream.Collectors;
+import model.Cart;
+import model.Item;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  *
  * @author trong
  */
-@WebServlet(name = "ProductDetailServlet", urlPatterns = {"/product-detail"})
-public class ProductDetailServlet extends HttpServlet {
+@WebServlet(name = "CheckoutServlet", urlPatterns = {"/checkout"})
+public class CheckoutServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -42,10 +47,10 @@ public class ProductDetailServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ProductDetailServlet</title>");
+            out.println("<title>Servlet CheckoutServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ProductDetailServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet CheckoutServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -63,28 +68,7 @@ public class ProductDetailServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String id_raw = request.getParameter("id");
-        ProductDAO productDao = new ProductDAO();
-        int size = productDao.countProduct();
-        Random rd = new Random();
-        int n = rd.nextInt(1, size);
-        if (size - n < 4) {
-            n = n - 4;
-        }
-
-        CategoryDAO categoryDao = new CategoryDAO();
-        List<Category> listCategory = categoryDao.getAllCategory();
-        List<Product> relatedProducts = productDao.getProductByPage(n, 4);
-        
-        try {
-            int id = Integer.parseInt(id_raw);
-            Product product = productDao.getProductByID(id);
-            request.setAttribute("product", product);
-            request.setAttribute("category", listCategory);
-            request.setAttribute("relatedProducts", relatedProducts);
-            request.getRequestDispatcher("customer/product-detail.jsp").forward(request, response);
-        } catch (NumberFormatException e) {
-        }
+        doPost(request, response);
     }
 
     /**
@@ -98,7 +82,30 @@ public class ProductDetailServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        // Lấy mảng productId từ form
+        String[] productIds = request.getParameterValues("productId");
+
+        HttpSession session = request.getSession();
+        Cart cart = (Cart) session.getAttribute("cart");
+        List<Item> checkoutItems = new ArrayList<>();
+
+        if (cart != null && productIds != null) {
+            List<String> ids = Arrays.asList(productIds);
+            for (Item item : cart.getItems()) {
+                if (ids.contains(String.valueOf(item.getProduct().getProductID()))) {
+                    checkoutItems.add(item);
+                }
+            }
+        }
+        
+        Cart checkoutCart = new Cart();
+        checkoutCart.setItems(checkoutItems);
+
+        // Lưu vào request để forward sang checkout.jsp
+        request.setAttribute("checkoutItems", checkoutCart);
+
+        // Forward sang checkout.jsp
+        request.getRequestDispatcher("customer/checkout.jsp").forward(request, response);
     }
 
     /**

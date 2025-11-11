@@ -416,7 +416,7 @@
                         Email hoặc mật khẩu không chính xác!
                     </div>
                 </c:if>
-                <form class="login-form" action="login-customer" method="POST">
+                <form class="login-form" action="../login-customer" method="POST">
                     <div class="form-group">
                         <label for="email">Email</label>
                         <div class="input-wrapper">

@@ -49,7 +49,7 @@ public class AddProductServlet extends HttpServlet {
             Product p = new Product(0, name, description, price, quantity, c, image);
             productDao.addProduct(p);
             // 4️⃣ Redirect về dashboard
-            response.sendRedirect("dashboard-product");
+            response.sendRedirect("admin/dashboard-product");
 
         } catch (NumberFormatException e) {
             e.printStackTrace();

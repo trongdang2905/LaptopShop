@@ -68,7 +68,7 @@ public class DeleteDashboardServlet extends HttpServlet {
         try {
             int id = Integer.parseInt(id_raw);
             dao.deleteProductByID(id);
-            response.sendRedirect("dashboard-product");
+            response.sendRedirect("admin/dashboard-product");
         } catch (NumberFormatException e) {
         }
     }

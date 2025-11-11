@@ -89,7 +89,7 @@ public class ShowProductServlet extends HttpServlet {
         int size = listProduct.size();
         request.setAttribute("size", size);
         request.setAttribute("category", listCategory);
-        request.getRequestDispatcher("index.jsp").forward(request, response);
+        request.getRequestDispatcher("customer/index.jsp").forward(request, response);
     }
 
     /**

@@ -5,7 +5,7 @@
 package controller;
 
 import dao.AccountDAO;
-import dao.CustomerDAO;
+
 import dao.EmployeeDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -96,14 +96,14 @@ public class RegisterEmployeeServlet extends HttpServlet {
         
         if (accDao.getAccountByEmail(email) != null) {
             request.setAttribute("existedAccount", "error");
-            request.getRequestDispatcher("register-employee.jsp").forward(request, response);
+            request.getRequestDispatcher("admin/register-employee.jsp").forward(request, response);
         }// Nếu chưa thì tạo employee account mới
         else {
             Account account = new Account(0, email, hashedPassword, 3, true, Timestamp.valueOf(now));
             Employee employee = new Employee(0, account, name, email, phone, deparment, Date.valueOf(hireDate), salary);
             empDao.addCustomer(employee, account);
             request.setAttribute("success", "s");
-            request.getRequestDispatcher("register-employee.jsp").forward(request, response);
+            request.getRequestDispatcher("admin/register-employee.jsp").forward(request, response);
         }
 
     }

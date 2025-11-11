@@ -73,7 +73,7 @@ public class GetCategoryServlet extends HttpServlet {
             CategoryDAO cateDao = new CategoryDAO();
             List<Category> listCategory = cateDao.getAllCategory();
             request.setAttribute("category", listCategory);
-            request.getRequestDispatcher("index.jsp").forward(request, response);
+            request.getRequestDispatcher("customer/index.jsp").forward(request, response);
         } catch (ServletException | IOException | NumberFormatException e) {
         }
     }

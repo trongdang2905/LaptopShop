@@ -79,7 +79,7 @@ public class SearchProductServlet extends HttpServlet {
         }
 
         request.setAttribute("product", searchList);
-        request.getRequestDispatcher("index.jsp").forward(request, response);
+        request.getRequestDispatcher("customer/index.jsp").forward(request, response);
 
     }
 

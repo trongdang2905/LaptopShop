@@ -79,7 +79,7 @@ public class DashBoardSearch extends HttpServlet {
         int size = searchList.size();
         request.setAttribute("size", size);
         request.setAttribute("product", searchList);
-        request.getRequestDispatcher("dashboard-product.jsp").forward(request, response);
+        request.getRequestDispatcher("admin/dashboard-product.jsp").forward(request, response);
     }
 
     /**

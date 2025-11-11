@@ -1,16 +1,17 @@
 <%-- 
-    Document   : dashboard-add-product
-    Created on : Oct 22, 2025, 7:06:11 PM
+    Document   : dashboard-update-product
+    Created on : Oct 23, 2025, 12:57:05 AM
     Author     : trong
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Add Product - Laptop Shop</title>
+        <title>Update Product - Laptop Shop</title>
         <style>
             @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
@@ -225,6 +226,66 @@
                 line-height: 1.6;
             }
 
+            .warning-card {
+                background: rgba(245, 158, 11, 0.1);
+                border: 1px solid rgba(245, 158, 11, 0.3);
+                padding: 16px;
+                border-radius: 12px;
+                margin-bottom: 20px;
+            }
+
+            .warning-card-title {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                font-size: 14px;
+                font-weight: 600;
+                color: #fbbf24;
+                margin-bottom: 8px;
+            }
+
+            .warning-card-text {
+                font-size: 13px;
+                color: #94a3b8;
+                line-height: 1.6;
+            }
+
+            .current-images-section {
+                margin-bottom: 20px;
+            }
+
+            .current-images-label {
+                font-size: 13px;
+                color: #94a3b8;
+                margin-bottom: 10px;
+                display: block;
+            }
+
+            .current-images-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+                gap: 12px;
+                padding: 15px;
+                background: rgba(15, 23, 42, 0.5);
+                border-radius: 12px;
+                border: 1px solid rgba(148, 163, 184, 0.2);
+            }
+
+            .current-image-item {
+                position: relative;
+                border-radius: 8px;
+                overflow: hidden;
+                background: #0f172a;
+                border: 1px solid rgba(148, 163, 184, 0.2);
+                aspect-ratio: 1;
+            }
+
+            .current-image-item img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
             .image-links-container {
                 display: flex;
                 flex-direction: column;
@@ -326,6 +387,15 @@
                 padding: 10px;
             }
 
+            .new-images-label {
+                font-size: 13px;
+                color: #94a3b8;
+                margin-top: 20px;
+                margin-bottom: 10px;
+                display: block;
+                font-weight: 600;
+            }
+
             .form-row {
                 display: grid;
                 grid-template-columns: 1fr 1fr;
@@ -421,13 +491,13 @@
             </div>
             <ul class="nav-menu">
                 <li class="nav-item">
-                    <a href="dashboard.jsp" class="nav-link">
+                    <a href="admin/dashboard.jsp" class="nav-link">
                         <span>📊</span>
                         <span>Dashboard</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="products.jsp" class="nav-link active">
+                    <a href="admin/dashboard-product" class="nav-link active">
                         <span>💼</span>
                         <span>Products</span>
                     </a>
@@ -461,19 +531,21 @@
 
         <main class="main-content">
             <div class="breadcrumb">
-                <a href="dashboard.jsp">Dashboard</a>
+                <a href="admin/dashboard.jsp">Dashboard</a>
                 <span>→</span>
-                <a href="dashboard-product.jsp">Products</a>
+                <a href="admin/dashboard-product">Products</a>
                 <span>→</span>
-                <span class="current">Add Product</span>
+                <span class="current">Update Product</span>
             </div>
 
             <div class="page-header">
-                <h2>Add New Product ✨</h2>
-                <p>Fill in the information below to add a new laptop to your inventory</p>
+                <h2>Update Product ✏️</h2>
+                <p>Modify the product information below</p>
             </div>
 
-            <form action="add-product" method="POST">
+            <form action="edit-product" method="POST">
+                <input type="hidden" name="productId" value="${product.productID}">
+
                 <div class="form-container">
                     <div>
                         <div class="form-card">
@@ -481,26 +553,26 @@
 
                             <div class="form-group">
                                 <label class="form-label">Product Name<span class="required">*</span></label>
-                                <input type="text" name="name" class="form-input" placeholder="e.g., ASUS TUF Gaming F16 FX607VU-LL034W" required>
+                                <input type="text" name="name" class="form-input" placeholder="e.g., ASUS TUF Gaming F16 FX607VU-LL034W" value="${product.name}" required>
                                 <p class="form-hint">Enter the full product name including model number</p>
                             </div>
 
                             <div class="form-group">
                                 <label class="form-label">Description<span class="required">*</span></label>
-                                <textarea name="description" class="form-textarea" placeholder="Describe the product features, specifications, and benefits..." required></textarea>
+                                <textarea name="description" class="form-textarea" placeholder="Describe the product features, specifications, and benefits..." required>${product.description}</textarea>
                                 <p class="form-hint">Provide detailed information about the product</p>
                             </div>
 
                             <div class="form-row">
                                 <div class="form-group">
                                     <label class="form-label">Price (₫)<span class="required">*</span></label>
-                                    <input type="number" name="price" class="form-input" placeholder="21490000" min="0" step="1000" required>
+                                    <input type="number" name="price" class="form-input" placeholder="21490000" min="0" step="1000" value="${product.getFormattedPrice()}" required>
                                     <p class="form-hint">Enter price in Vietnamese Dong</p>
                                 </div>
 
                                 <div class="form-group">
                                     <label class="form-label">Quantity in Stock<span class="required">*</span></label>
-                                    <input type="number" name="quantityInStock" class="form-input" placeholder="50" min="0" required>
+                                    <input type="number" name="quantityInStock" class="form-input" placeholder="50" min="0" value="${product.quantityInStock}" required>
                                     <p class="form-hint">Available units for sale</p>
                                 </div>
                             </div>
@@ -509,18 +581,18 @@
                                 <label class="form-label">Brand<span class="required">*</span></label>
                                 <select name="brand" class="form-select" required>
                                     <option value="">Select Brand</option>
-                                    <option value="Asus">ASUS</option>
-                                    <option value="Acer">Acer</option>
-                                    <option value="HP">HP</option>
-                                    <option value="Dell">Dell</option>
-                                    <option value="Lenovo">Lenovo</option>
-                                    <option value="MSI">MSI</option>
-                                    <option value="Macbook">Apple(MacBook)</option>
-                                    <option value="Samsung">Samsung</option>
-                                    <option value="LG">LG</option>
-                                    <option value="Razer">Razer</option>
-                                    <option value="Microsoft">Microsoft (Surface)</option>
-                                    <option value="Gigabyte">Gigabyte</option>
+                                    <option value="Asus" ${product.category.name == 'Asus' ? 'selected' : ''}>ASUS</option>
+                                    <option value="Acer" ${product.category.name == 'Acer' ? 'selected' : ''}>Acer</option>
+                                    <option value="HP" ${product.category.name == 'HP' ? 'selected' : ''}>HP</option>
+                                    <option value="Dell" ${product.category.name == 'Dell' ? 'selected' : ''}>Dell</option>
+                                    <option value="Lenovo" ${product.category.name == 'Lenovo' ? 'selected' : ''}>Lenovo</option>
+                                    <option value="MSI" ${product.category.name == 'MSI' ? 'selected' : ''}>MSI</option>
+                                    <option value="Macbook" ${product.category.name == 'Macbook' ? 'selected' : ''}>Apple(MacBook)</option>
+                                    <option value="Samsung" ${product.category.name == 'Samsung' ? 'selected' : ''}>Samsung</option>
+                                    <option value="LG" ${product.category.name == 'LG' ? 'selected' : ''}>LG</option>
+                                    <option value="Razer" ${product.category.name == 'Razer' ? 'selected' : ''}>Razer</option>
+                                    <option value="Microsoft" ${product.category.name == 'Microsoft' ? 'selected' : ''}>Microsoft (Surface)</option>
+                                    <option value="Gigabyte" ${product.category.name == 'Gigabyte' ? 'selected' : ''}>Gigabyte</option>
                                 </select>
                             </div>
                         </div>
@@ -530,6 +602,32 @@
                         <div class="form-card">
                             <h3 class="card-title">Product Images</h3>
 
+                            <div class="warning-card">
+                                <div class="warning-card-title">
+                                    <span>⚠️</span>
+                                    <span>Image Update</span>
+                                </div>
+                                <p class="warning-card-text">
+                                    Adding new image links will replace all existing product images. Leave empty to keep the current images.
+                                </p>
+                            </div>
+
+                            <div class="current-images-section">
+                                <label class="current-images-label">Current Images:</label>
+                                <div class="current-images-grid" id="currentImagesGrid">
+                                    <!-- Assuming product.imageLinks is an array or comma-separated string -->
+                                    <c:forEach items="${product.getImage()}" var="imageLink">
+                                        <div class="current-image-item">
+                                            <img src="${imageLink}" alt="${product.name}" onerror="this.parentElement.style.display='none'">
+                                        </div>
+                                    </c:forEach>
+                                    <!-- If using single image property, use this instead: -->
+                                    <!-- <div class="current-image-item">
+                                        <img src="${product.image}" alt="${product.name}">
+                                    </div> -->
+                                </div>
+                            </div>
+
                             <div class="info-card">
                                 <div class="info-card-title">
                                     <span>💡</span>
@@ -538,17 +636,19 @@
                                 <p class="info-card-text">
                                     • Enter valid image URLs (must start with http:// or https://)<br>
                                     • You can add up to 5 image links (expandable)<br>
-                                    • At least one image link is required<br>
+                                    • Leave all fields empty to keep existing images<br>
                                     • Preview will show after entering valid URLs
                                 </p>
                             </div>
 
+                            <label class="new-images-label">New Image Links (Optional):</label>
                             <div class="form-group">
-                                <label class="form-label">Image Links<span class="required">*</span></label>
                                 <div class="image-links-container" id="imageLinksContainer">
-                                    <div class="image-link-item">
-                                        <input type="url" name="imageLinks" class="form-input" placeholder="https://example.com/image1.jpg" required>
-                                    </div>
+                                    
+                                        <div class="image-link-item">
+                                            <input type="url" name="imageLinks" class="form-input" placeholder="https://example.com/image1.jpgF">
+                                        </div>
+                                    
                                 </div>
                                 <button type="button" class="btn-add-link" id="addLinkBtn" onclick="addImageLink()">
                                     <span>➕</span>
@@ -562,8 +662,8 @@
                 </div>
 
                 <div class="form-actions">
-                    <a href="dashboard-product" class="btn btn-secondary">Cancel</a>
-                    <button type="submit" class="btn btn-primary">Add Product</button>
+                    <a href="admin/dashboard-product" class="btn btn-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-primary">Update Product</button>
                 </div>
             </form>
         </main>
@@ -609,9 +709,12 @@
                 const previewGrid = document.getElementById('imagePreviewGrid');
                 previewGrid.innerHTML = '';
 
+                let hasNewImages = false;
+
                 inputs.forEach((input, index) => {
                     const url = input.value.trim();
                     if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
+                        hasNewImages = true;
                         const previewDiv = document.createElement('div');
                         previewDiv.className = 'image-preview loading';
                         previewDiv.textContent = '⏳';
@@ -630,6 +733,13 @@
                         img.src = url;
                     }
                 });
+
+                // Show/hide preview grid based on whether there are new images
+                if (hasNewImages) {
+                    previewGrid.style.display = 'grid';
+                } else {
+                    previewGrid.style.display = 'none';
+                }
             }
 
             // Add event listeners to initial input

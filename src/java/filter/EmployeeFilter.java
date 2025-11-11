@@ -109,7 +109,7 @@ public class EmployeeFilter implements Filter {
         HttpSession session = req.getSession();
         if (session.getAttribute("accountEmployee") == null) {
             if (session.getAttribute("accountAdmin") == null) {
-                res.sendRedirect("page-not-found.jsp");
+                res.sendRedirect("../common/page-not-found.jsp");
                 return;
             } else {
                 chain.doFilter(request, response);

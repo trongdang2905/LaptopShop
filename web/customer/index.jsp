@@ -22,12 +22,20 @@
             body {
                 font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
                 background-color: #f4f4f4;
+                padding-top: 85px;
             }
 
             .header {
                 background: linear-gradient(135deg, #d32f2f 0%, #e74c3c 100%);
                 color: white;
                 padding: 15px 0;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                z-index: 1000;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
             }
 
             .header-container {
@@ -889,7 +897,7 @@
                     <input type="text" id="searchInput" placeholder="Bạn muốn mua gì hôm nay?" onkeypress="handleSearch(event)">
                 </div>
                 <div class="header-actions">
-                    <div class="cart-icon">🛒 Giỏ hàng</div>
+                    <div class="cart-icon" onclick="window.location.href='customer/cart.jsp'">🛒 Giỏ hàng</div>
                     <!-- Check if user is logged in -->
                     <c:choose>
                         <c:when test="${sessionScope.accountCustomer != null && sessionScope.infoCustomer !=null}">
@@ -916,7 +924,7 @@
                                         <span>Đơn hàng của tôi</span>
                                     </a>
 
-                                    
+
 
                                     <a href="addresses.jsp" class="user-dropdown-item">
                                         <span class="user-dropdown-icon">📍</span>
@@ -1130,7 +1138,7 @@
         }
 
         function changeToLogin() {
-            window.location.href = "login.jsp";
+            window.location.href = "common/login.jsp";
         }
 
 

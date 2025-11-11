@@ -14,8 +14,6 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.Part;
-import java.io.File;
 import model.Category;
 import model.Product;
 
@@ -24,14 +22,9 @@ import model.Product;
  * @author trong
  */
 @WebServlet(name = "EditDashboardServlet", urlPatterns = {"/edit-product"})
-@MultipartConfig(
-        fileSizeThreshold = 1024 * 1024 * 1, // 1MB
-        maxFileSize = 1024 * 1024 * 10, // 10MB
-        maxRequestSize = 1024 * 1024 * 15 // 15MB
-)
+
 public class EditDashboardServlet extends HttpServlet {
 
-    private static final String uploadPath = "D:\\FPT\\Fall_2025\\PRJ301\\Project\\LaptopShop\\web\\images";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>

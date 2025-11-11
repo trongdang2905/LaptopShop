@@ -273,7 +273,7 @@
             </p>
 
             <div class="error-buttons">
-                <a href="product" class="btn btn-primary">
+                <a href="../product" class="btn btn-primary">
                     🏠 Về trang chủ
                 </a>
                 <button onclick="history.back()" class="btn btn-secondary">

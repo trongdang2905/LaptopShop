@@ -89,10 +89,10 @@ public class UpdateProfileServlet extends HttpServlet {
             Customer customer = new Customer(0, account, name, email, phone, address, Date.valueOf(date));
             cusDao.updateCustomer(customer);
             request.setAttribute("success", "success");
-            request.getRequestDispatcher("profile.jsp").forward(request, response);
+            request.getRequestDispatcher("customer/profile.jsp").forward(request, response);
         }else {
             request.setAttribute("fail", "fail");
-            request.getRequestDispatcher("profile.jsp").forward(request, response);
+            request.getRequestDispatcher("customer/profile.jsp").forward(request, response);
         }
     }
 

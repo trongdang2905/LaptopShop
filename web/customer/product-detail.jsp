@@ -22,12 +22,20 @@
             body {
                 font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
                 background-color: #f4f4f4;
+                padding-top: 85px;
             }
 
             .header {
                 background: linear-gradient(135deg, #d32f2f 0%, #e74c3c 100%);
                 color: white;
                 padding: 15px 0;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                z-index: 1000;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
             }
 
             .header-container {
@@ -44,6 +52,43 @@
                 font-weight: bold;
                 letter-spacing: 1px;
                 cursor: pointer;
+            }
+
+            .cart-wrapper {
+                position: relative;
+            }
+
+            .cart-icon {
+                background: linear-gradient(135deg, #d32f2f 0%, #e74c3c 100%);
+                color: white;
+                padding: 12px 24px;
+                border-radius: 25px;
+                cursor: pointer;
+                transition: all 0.3s;
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                font-weight: 600;
+                position: relative;
+            }
+
+            .cart-icon:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(211, 47, 47, 0.3);
+            }
+
+            .cart-badge {
+                background: rgba(255, 255, 255, 0.3);
+                color: white;
+                padding: 2px 10px;
+                border-radius: 12px;
+                font-size: 14px;
+                font-weight: bold;
+            }
+
+            /* Cart Dropdown - Hidden by default */
+            .cart-dropdown {
+                display: none;
             }
 
             .header-nav {
@@ -176,7 +221,7 @@
                 margin-top: 10px;
                 z-index: 1000;
             }
-            
+
             .user-menu {
                 display: flex;
                 align-items: center;
@@ -878,7 +923,13 @@
                     <input type="text" id="searchInput" placeholder="Bạn muốn mua gì hôm nay?" onkeypress="handleSearch(event)">
                 </div>
                 <div class="header-actions">
-                    <div class="cart-icon">🛒 Giỏ hàng</div>
+                    <div class="cart-wrapper">
+                        <!-- Cart Icon with item count -->
+                        <div class="cart-icon" onclick="window.location.href = 'customer/cart.jsp'">
+                            🛒 Giỏ hàng
+                            <span class="cart-badge">${sessionScope.size}</span>
+                        </div>
+                    </div>
                     <c:choose>
                         <c:when test="${sessionScope.accountCustomer != null && sessionScope.infoCustomer !=null}">
                             <!-- User Menu (when logged in) -->
@@ -911,10 +962,7 @@
                                         <span>Địa chỉ giao hàng</span>
                                     </a>
 
-                                    <a href="settings.jsp" class="user-dropdown-item">
-                                        <span class="user-dropdown-icon">⚙️</span>
-                                        <span>Cài đặt</span>
-                                    </a>
+
 
                                     <a href="logout" class="user-dropdown-item logout" onclick="return confirm('Bạn có chắc muốn đăng xuất?')">
                                         <span class="user-dropdown-icon">🚪</span>
@@ -1012,13 +1060,13 @@
                         <span class="quantity-label">Số lượng:</span>
                         <div class="quantity-controls">
                             <button class="qty-btn" onclick="decreaseQty()">-</button>
-                            <input type="number" class="qty-input" id="quantity" value="1" min="1" max="10">
+                            <input type="number" class="qty-input" id="quantity" value="1" min="1" max="99">
                             <button class="qty-btn" onclick="increaseQty()">+</button>
                         </div>
                     </div>
 
                     <div class="action-buttons">
-                        <button class="btn btn-secondary">🛒 Thêm vào giỏ</button>
+                        <button class="btn btn-secondary" onclick="addToCart(${product.productID})">🛒 Thêm vào giỏ</button>
                         <button class="btn btn-primary">⚡ Mua ngay</button>
                     </div>
 
@@ -1167,6 +1215,26 @@
         </div>
 
         <script>
+
+
+            function addToCart(productID) {
+            const qtyInput = document.getElementById('quantity');
+            if (!qtyInput) {
+            alert("Không tìm thấy ô nhập số lượng!");
+            return;
+            }
+            const qty = qtyInput.value;
+            console.log("productID:", productID, "quantity:", qty);
+            fetch(`add-to-cart?productId=` + productID + `&quantity=` + qty, {method: 'GET'})
+                        .then(res => res.text())
+                        .then(data => {
+                            console.log('Đã thêm vào giỏ:', data);
+                            alert('Đã thêm vào giỏ hàng!');
+                        });
+            }
+
+
+
             function filterCategory(id) {
                 if (id == 0) {
                     window.location.href = "product";
@@ -1184,8 +1252,13 @@
                 }
             }
 
+
+            function changeToLogin() {
+                window.location.href = "common/login.jsp";
+            }
+
             function hrefToDetail(id) {
-                window.location.href = "detail?id=" + id;
+                window.location.href = "product-detail?id=" + id;
             }
 
             function changeImage(thumbnail) {

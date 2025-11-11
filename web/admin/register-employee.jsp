@@ -354,13 +354,13 @@
             </div>
             <ul class="nav-menu">
                 <li class="nav-item">
-                    <a href="dashboard.jsp" class="nav-link">
+                    <a href="admin/dashboard.jsp" class="nav-link">
                         <span>📊</span>
                         <span>Dashboard</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="dashboard-product" class="nav-link">
+                    <a href="admin/dashboard-product" class="nav-link">
                         <span>💼</span>
                         <span>Products</span>
                     </a>
@@ -394,9 +394,9 @@
 
         <main class="main-content">
             <div class="breadcrumb">
-                <a href="dashboard.jsp">Dashboard</a>
+                <a href="admin/dashboard.jsp">Dashboard</a>
                 <span>/</span>
-                <a href="list-employee.jsp">Employees</a>
+                <a href="admin/list-employee.jsp">Employees</a>
                 <span>/</span>
                 <span style="color: #f1f5f9;">Create Employee</span>
             </div>

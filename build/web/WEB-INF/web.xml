@@ -25,7 +25,7 @@
     </filter>
     <filter-mapping>
         <filter-name>EmployeeFilter</filter-name>
-        <url-pattern>/employee-handle-order.jsp</url-pattern>
+        <url-pattern>/employee/*</url-pattern>
         
     </filter-mapping>
     
@@ -35,11 +35,7 @@
     </filter>
     <filter-mapping>
         <filter-name>AdminFilter</filter-name>
-        <url-pattern>/dashboard-add-product.jsp</url-pattern>
-        <url-pattern>/dashboard-product.jsp</url-pattern>
-        <url-pattern>/dashboard-update-product.jsp</url-pattern>
-        <url-pattern>/dashboard.jsp</url-pattern>
-        <url-pattern>/list-employee.jsp</url-pattern>
+        <url-pattern>/admin/*</url-pattern>
         <url-pattern>/add-product</url-pattern>
         <url-pattern>/dashboard-search</url-pattern>
         <url-pattern>/delete-product</url-pattern>

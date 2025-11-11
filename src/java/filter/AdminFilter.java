@@ -103,7 +103,7 @@ public class AdminFilter implements Filter {
         HttpServletResponse res = (HttpServletResponse) response;
         HttpSession session = req.getSession();
         if (session.getAttribute("accountAdmin") == null) {
-            res.sendRedirect("page-not-found.jsp");
+            res.sendRedirect("../common/page-not-found.jsp");
             return;
         }
         if (debug) {
