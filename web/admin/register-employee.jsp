@@ -354,19 +354,19 @@
             </div>
             <ul class="nav-menu">
                 <li class="nav-item">
-                    <a href="admin/dashboard.jsp" class="nav-link">
+                    <a href="dashboard.jsp" class="nav-link">
                         <span>📊</span>
                         <span>Dashboard</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="admin/dashboard-product" class="nav-link">
+                    <a href="../dashboard-product" class="nav-link">
                         <span>💼</span>
                         <span>Products</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="../employee-handle" class="nav-link">
                         <span>🛒</span>
                         <span>Orders</span>
                     </a>
@@ -378,15 +378,15 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link active">
+                    <a href="register-employee.jsp" class="nav-link active">
                         <span>👔</span>
                         <span>Employees</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <span>⚙️</span>
-                        <span>Settings</span>
+                    <a href="../logout" class="nav-link">
+                        <span>🚪️</span>
+                        <span>Logout</span>
                     </a>
                 </li>
             </ul>

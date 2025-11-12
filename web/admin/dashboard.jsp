@@ -541,19 +541,19 @@
             </div>
             <ul class="nav-menu">
                 <li class="nav-item">
-                    <a href="#" class="nav-link active">
+                    <a href="dashboard.jsp" class="nav-link active">
                         <span>📊</span>
                         <span>Dashboard</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="admin/dashboard-product" class="nav-link">
+                    <a href="../dashboard-product" class="nav-link">
                         <span>💼</span>
                         <span>Products</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="../employee-handle" class="nav-link">
                         <span>🛒</span>
                         <span>Orders</span>
                     </a>
@@ -565,17 +565,12 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="admin/register-employee.jsp" class="nav-link">
+                    <a href="register-employee.jsp" class="nav-link">
                         <span>👔</span>
                         <span>Employees</span>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <span>📈</span>
-                        <span>Analytics</span>
-                    </a>
-                </li>
+                
                 <li class="nav-item">
                     <a href="../logout" class="nav-link">
                         <span>🚪️</span>
@@ -596,7 +591,7 @@
                         <span class="search-icon">🔍</span>
                         <input type="text" placeholder="Search products, orders...">
                     </div>
-                    <a href="admin/dashboard-add-product.jsp" class="btn btn-primary">+ Add Product</a>
+                    <a href="dashboard-add-product.jsp" class="btn btn-primary">+ Add Product</a>
                 </div>
             </div>
 
@@ -784,7 +779,7 @@
     </body>
     <script>
         function linkToDashBoard() {
-            window.location.href = "admin/dashboard.jsp";
+            window.location.href = "dashboard.jsp";
         }
     </script>
 </html>

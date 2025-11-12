@@ -87,7 +87,7 @@ public class LoginCustomerServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        
         AccountDAO accDao = new AccountDAO();
         CustomerDAO cusDao = new CustomerDAO();
         String email = request.getParameter("email");
@@ -114,7 +114,20 @@ public class LoginCustomerServlet extends HttpServlet {
                     if (sessionCart != null) {
                         // Lấy cart hiện tại trong DB của customer
                         List<Item> dbItems = daoCart.getItemByCustomerID(customer.getCustomerID());
-                        Cart dbCart = new Cart();
+                        if (dbItems == null) {
+                            dbItems = sessionCart.getItems();
+                            daoCart.addCart(sessionCart);
+                        }
+                        Cart dbCart = daoCart.getCartByID(customer.getCustomerID());
+                        if (dbCart == null) {
+                            dbCart = new Cart();
+                            dbCart.setCreatedAt(Timestamp.valueOf(LocalDateTime.now()));
+                            dbCart.setItems(dbItems);
+                            dbCart.setStatus("Active");
+                            dbCart.setCustomer(customer);
+                            dbCart.setTotalPrice(sessionCart.getTotalAmount());
+                            daoCart.addNewCart(dbCart);
+                        }
                         dbCart.setItems(dbItems);
 
                         // Merge sessionCart vào dbCart
@@ -124,7 +137,7 @@ public class LoginCustomerServlet extends HttpServlet {
                                 existing.setQuantity(existing.getQuantity() + sItem.getQuantity());
                                 existing.setSubTotal(existing.getQuantity() * existing.getUnitPrice());
                             } else {
-
+                                
                                 sItem.setCart(dbCart);
                                 dbCart.addToCart(sItem);
                             }
@@ -134,7 +147,7 @@ public class LoginCustomerServlet extends HttpServlet {
                         dbCart.setCustomer(customer);
                         dbCart.setCreatedAt(Timestamp.valueOf(LocalDateTime.now()));
                         dbCart.setStatus("Active");
-                        daoCart.addCart(dbCart);
+                        daoCart.updateAndInsert(dbCart, customer);
 
                         // Xóa session cart cũ
                         session.removeAttribute("cart");
@@ -170,7 +183,7 @@ public class LoginCustomerServlet extends HttpServlet {
                     EmployeeDAO empDao = new EmployeeDAO();
                     session.setAttribute("infoEmployee", empDao.getEmployeeByEmail(email));
                     session.setAttribute("accountEmployee", account);
-                    response.sendRedirect("employee/employee-handle-order.jsp");
+                    response.sendRedirect("/laptop/employee-handle");
                 }
             } else {
                 msg = "Account not existed!";
@@ -178,7 +191,7 @@ public class LoginCustomerServlet extends HttpServlet {
                 request.getRequestDispatcher("common/login.jsp").forward(request, response);
             }
         }
-
+        
     }
 
     /**

@@ -897,7 +897,7 @@
                     <input type="text" id="searchInput" placeholder="Bạn muốn mua gì hôm nay?" onkeypress="handleSearch(event)">
                 </div>
                 <div class="header-actions">
-                    <div class="cart-icon" onclick="window.location.href='customer/cart.jsp'">🛒 Giỏ hàng</div>
+                    <div class="cart-icon" onclick="window.location.href = 'customer/cart.jsp'">🛒 Giỏ hàng</div>
                     <!-- Check if user is logged in -->
                     <c:choose>
                         <c:when test="${sessionScope.accountCustomer != null && sessionScope.infoCustomer !=null}">
@@ -914,27 +914,19 @@
                                         <div class="user-dropdown-email">${sessionScope.accountCustomer.userName}</div>
                                     </div>
 
-                                    <a href="profile.jsp" class="user-dropdown-item">
+                                    <a href="customer/profile.jsp" class="user-dropdown-item">
                                         <span class="user-dropdown-icon">👤</span>
                                         <span>Thông tin tài khoản</span>
                                     </a>
 
-                                    <a href="orders.jsp" class="user-dropdown-item">
+                                    <a href="my-order" class="user-dropdown-item">
                                         <span class="user-dropdown-icon">📦</span>
                                         <span>Đơn hàng của tôi</span>
                                     </a>
 
 
 
-                                    <a href="addresses.jsp" class="user-dropdown-item">
-                                        <span class="user-dropdown-icon">📍</span>
-                                        <span>Địa chỉ giao hàng</span>
-                                    </a>
 
-                                    <a href="settings.jsp" class="user-dropdown-item">
-                                        <span class="user-dropdown-icon">⚙️</span>
-                                        <span>Cài đặt</span>
-                                    </a>
 
                                     <a href="logout" class="user-dropdown-item logout" onclick="return confirm('Bạn có chắc muốn đăng xuất?')">
                                         <span class="user-dropdown-icon">🚪</span>

@@ -31,6 +31,17 @@ public class Item {
         this.unitPrice = unitPrice;
         this.subTotal = subTotal;
     }
+    
+    public String getFormattedTotal() {
+        NumberFormat formatter = NumberFormat.getInstance(new Locale("vi", "VN"));
+        return formatter.format(getSubTotal()) + "đ";
+    }
+    
+    
+    public String getFormattedUnitPrice() {
+        NumberFormat formatter = NumberFormat.getInstance(new Locale("vi", "VN"));
+        return formatter.format(unitPrice) + "đ";
+    }
 
     // Hàm này trả về giá đã định dạng
     public String getFormattedPrice() {
@@ -79,7 +90,7 @@ public class Item {
     }
 
     public double getSubTotal() {
-        return subTotal;
+        return unitPrice*quantity;
     }
 
     public void setSubTotal(double subTotal) {

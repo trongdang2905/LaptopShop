@@ -313,8 +313,8 @@
     <body>
         <header class="header">
             <div class="header-container">
-                <div class="logo" onclick="window.location.href = 'product'">Group 5</div>
-                <div class="back-btn" onclick="window.location.href = 'product'">
+                <div class="logo" onclick="window.location.href = '../product'">Group 5</div>
+                <div class="back-btn" onclick="window.location.href = '../product'">
                     ← Quay lại trang chủ
                 </div>
             </div>

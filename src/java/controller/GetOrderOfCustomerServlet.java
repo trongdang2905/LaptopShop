@@ -4,6 +4,7 @@
  */
 package controller;
 
+import dao.OrderDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,23 +13,16 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.io.BufferedReader;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-import model.Cart;
-import model.Item;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import java.util.ArrayList;
-import java.util.Arrays;
+import model.Customer;
+import model.MyOrder;
 
 /**
  *
  * @author trong
  */
-@WebServlet(name = "CheckoutServlet", urlPatterns = {"/checkout"})
-public class CheckoutServlet extends HttpServlet {
+@WebServlet(name = "GetOrderOfCustomerServlet", urlPatterns = {"/my-order"})
+public class GetOrderOfCustomerServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -47,10 +41,10 @@ public class CheckoutServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet CheckoutServlet</title>");
+            out.println("<title>Servlet GetOrderOfCustomerServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet CheckoutServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet GetOrderOfCustomerServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -68,7 +62,16 @@ public class CheckoutServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        doPost(request, response);
+        OrderDAO ordDao = new OrderDAO();
+        HttpSession session = request.getSession();
+        Customer customer = (Customer) session.getAttribute("infoCustomer");
+        if (customer == null) {
+            response.sendRedirect("product");
+            return;
+        }
+        List<MyOrder> myOrder = ordDao.getAllOrderByCustomerID(customer.getCustomerID());
+        request.setAttribute("orders", myOrder);
+        request.getRequestDispatcher("customer/my-order.jsp").forward(request, response);
     }
 
     /**
@@ -82,30 +85,7 @@ public class CheckoutServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Lấy mảng productId từ form
-        String[] productIds = request.getParameterValues("productId");
-
-        HttpSession session = request.getSession();
-        Cart cart = (Cart) session.getAttribute("cart");
-        List<Item> checkoutItems = new ArrayList<>();
-
-        if (cart != null && productIds != null) {
-            List<String> ids = Arrays.asList(productIds);
-            for (Item item : cart.getItems()) {
-                if (ids.contains(String.valueOf(item.getProduct().getProductID()))) {
-                    checkoutItems.add(item);
-                }
-            }
-        }
-
-        Cart checkoutCart = new Cart();
-        checkoutCart.setItems(checkoutItems);
-        session.setAttribute("checkoutItem", checkoutCart);
-        // Lưu vào request để forward sang checkout.jsp
-        request.setAttribute("checkoutItems", checkoutCart);
-
-        // Forward sang checkout.jsp
-        request.getRequestDispatcher("customer/checkout.jsp").forward(request, response);
+        processRequest(request, response);
     }
 
     /**

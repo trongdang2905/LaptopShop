@@ -945,22 +945,19 @@
                                         <div class="user-dropdown-email">${sessionScope.accountCustomer.userName}</div>
                                     </div>
 
-                                    <a href="profile.jsp" class="user-dropdown-item">
+                                    <a href="customer/profile.jsp" class="user-dropdown-item">
                                         <span class="user-dropdown-icon">👤</span>
                                         <span>Thông tin tài khoản</span>
                                     </a>
 
-                                    <a href="orders.jsp" class="user-dropdown-item">
+                                    <a href="my-order" class="user-dropdown-item">
                                         <span class="user-dropdown-icon">📦</span>
                                         <span>Đơn hàng của tôi</span>
                                     </a>
 
 
 
-                                    <a href="addresses.jsp" class="user-dropdown-item">
-                                        <span class="user-dropdown-icon">📍</span>
-                                        <span>Địa chỉ giao hàng</span>
-                                    </a>
+
 
 
 
@@ -1067,7 +1064,7 @@
 
                     <div class="action-buttons">
                         <button class="btn btn-secondary" onclick="addToCart(${product.productID})">🛒 Thêm vào giỏ</button>
-                        <button class="btn btn-primary">⚡ Mua ngay</button>
+                        <button class="btn btn-primary" onclick="window.location.href = 'customer/cart.jsp'">⚡ Mua ngay</button>
                     </div>
 
                     <div class="product-features">
@@ -1218,14 +1215,14 @@
 
 
             function addToCart(productID) {
-            const qtyInput = document.getElementById('quantity');
-            if (!qtyInput) {
-            alert("Không tìm thấy ô nhập số lượng!");
-            return;
-            }
-            const qty = qtyInput.value;
-            console.log("productID:", productID, "quantity:", qty);
-            fetch(`add-to-cart?productId=` + productID + `&quantity=` + qty, {method: 'GET'})
+                const qtyInput = document.getElementById('quantity');
+                if (!qtyInput) {
+                    alert("Không tìm thấy ô nhập số lượng!");
+                    return;
+                }
+                const qty = qtyInput.value;
+                console.log("productID:", productID, "quantity:", qty);
+                fetch(`add-to-cart?productId=` + productID + `&quantity=` + qty, {method: 'GET'})
                         .then(res => res.text())
                         .then(data => {
                             console.log('Đã thêm vào giỏ:', data);

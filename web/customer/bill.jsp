@@ -235,7 +235,7 @@
 
             .item-price {
                 text-align: right;
-                color: #666;
+                color: #333;
             }
 
             .item-quantity {
@@ -561,7 +561,7 @@
                         <div class="info-row">
                             <span class="info-value">
                                 ${sessionScope.infoCustomer.fullName} - ${sessionScope.infoCustomer.phone}<br>
-                                ${param.address != null ? param.address : 'Số 123, Đường ABC, Phường XYZ, Quận 1, TP. Hồ Chí Minh'}
+                                ${sessionScope.address}
                             </span>
                         </div>
                     </div>
@@ -581,23 +581,24 @@
                                     <th style="text-align: right;">Thành tiền</th>
                                 </tr>
                             </thead>
+                            
                             <tbody>
-                            <c:forEach items="${requestScope.checkoutItems.items}" var="item">
-                                <tr>
-                                    <td>
-                                        <div class="item-info">
-                                            <img src="${item.product.image[0]}" alt="${item.product.name}" class="item-image">
-                                            <div class="item-details">
-                                                <div class="item-name">${item.product.name}</div>
-                                                <div class="item-sku">SKU: ${item.product.id}</div>
+                                <c:forEach items="${sessionScope.checkoutItem.items}" var="item">
+                                    <tr>
+                                        <td>
+                                            <div class="item-info">
+                                                <img src="${item.product.image[0]}" alt="${item.product.name}" class="item-image">
+                                                <div class="item-details">
+                                                    <div class="item-name">${item.product.name}</div>
+                                                    <div class="item-sku">SKU: ${item.itemID}</div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </td>
-                                    <td class="item-quantity">${item.quantity}</td>
-                                    <td class="item-price">${item.product.getFormattedPrice()}</td>
-                                    <td class="item-total">${item.getFormattedPrice()}</td>
-                                </tr>
-                            </c:forEach>
+                                        </td>
+                                        <td class="item-quantity">${item.quantity}</td>
+                                        <td class="item-price">${item.getFormattedUnitPrice()}</td>
+                                        <td class="item-total">${item.getFormattedTotal()}</td>
+                                    </tr>
+                                </c:forEach>
                             </tbody>
                         </table>
                     </div>
@@ -606,7 +607,7 @@
                     <div class="summary-section">
                         <div class="summary-row">
                             <span class="summary-label">Tạm tính:</span>
-                            <span class="summary-value">${requestScope.checkoutItems.getFormattedPrice()}</span>
+                            <span class="summary-value">${sessionScope.checkoutItem.getFormattedPrice()}</span>
                         </div>
                         <div class="summary-row">
                             <span class="summary-label">Giảm giá:</span>
@@ -618,7 +619,7 @@
                         </div>
                         <div class="summary-total">
                             <span class="total-label">Tổng cộng:</span>
-                            <span class="total-value">${requestScope.checkoutItems.getFormattedPrice()}</span>
+                            <span class="total-value">${sessionScope.checkoutItem.getFormattedPrice()}</span>
                         </div>
                     </div>
 
@@ -642,7 +643,7 @@
                             <span>🖨️</span>
                             <span>In hóa đơn</span>
                         </button>
-                        <button class="btn btn-success" onclick="window.location.href = 'my-orders.jsp'">
+                        <button class="btn btn-success" onclick="window.location.href = '/laptop/my-order'">
                             <span>📦</span>
                             <span>Xem đơn hàng</span>
                         </button>

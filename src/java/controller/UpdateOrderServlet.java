@@ -11,24 +11,17 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import java.io.BufferedReader;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-import model.Cart;
-import model.Item;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import java.util.ArrayList;
-import java.util.Arrays;
+import com.google.gson.JsonObject;
+import dao.OrderDAO;
+import java.io.BufferedReader;
 
 /**
  *
  * @author trong
  */
-@WebServlet(name = "CheckoutServlet", urlPatterns = {"/checkout"})
-public class CheckoutServlet extends HttpServlet {
+@WebServlet(name = "UpdateOrderServlet", urlPatterns = {"/updateOrder"})
+public class UpdateOrderServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -47,10 +40,10 @@ public class CheckoutServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet CheckoutServlet</title>");
+            out.println("<title>Servlet UpdateOrderServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet CheckoutServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet UpdateOrderServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -68,7 +61,7 @@ public class CheckoutServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        doPost(request, response);
+        processRequest(request, response);
     }
 
     /**
@@ -82,30 +75,53 @@ public class CheckoutServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Lấy mảng productId từ form
-        String[] productIds = request.getParameterValues("productId");
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out = response.getWriter();
+        Gson gson = new Gson();
+        JsonObject jsonResponse = new JsonObject();
 
-        HttpSession session = request.getSession();
-        Cart cart = (Cart) session.getAttribute("cart");
-        List<Item> checkoutItems = new ArrayList<>();
-
-        if (cart != null && productIds != null) {
-            List<String> ids = Arrays.asList(productIds);
-            for (Item item : cart.getItems()) {
-                if (ids.contains(String.valueOf(item.getProduct().getProductID()))) {
-                    checkoutItems.add(item);
-                }
+        // Đọc dữ liệu JSON từ request
+        StringBuilder sb = new StringBuilder();
+        try (BufferedReader reader = request.getReader()) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                sb.append(line);
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            jsonResponse.addProperty("success", false);
+            jsonResponse.addProperty("message", "Failed to read request body");
+            out.print(jsonResponse.toString());
+            return;
         }
 
-        Cart checkoutCart = new Cart();
-        checkoutCart.setItems(checkoutItems);
-        session.setAttribute("checkoutItem", checkoutCart);
-        // Lưu vào request để forward sang checkout.jsp
-        request.setAttribute("checkoutItems", checkoutCart);
+        try {
+            JsonObject jsonObject = gson.fromJson(sb.toString(), JsonObject.class);
+            int orderId = jsonObject.get("orderId").getAsInt();
+            String newStatus = jsonObject.get("status").getAsString();
+            String employeeEmail = jsonObject.get("employeeEmail").getAsString();
+            String updateAt = jsonObject.get("updateAt").getAsString();
+            System.out.println(employeeEmail);
+            // Gọi DAO để update order
+            OrderDAO ordDao = new OrderDAO();
+            boolean updated = ordDao.updateOrderStatus(orderId, newStatus, employeeEmail, updateAt);
 
-        // Forward sang checkout.jsp
-        request.getRequestDispatcher("customer/checkout.jsp").forward(request, response);
+            if (updated) {
+                jsonResponse.addProperty("success", true);
+            } else {
+                jsonResponse.addProperty("success", false);
+                jsonResponse.addProperty("message", "Order not found or update failed");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            jsonResponse.addProperty("success", false);
+            jsonResponse.addProperty("message", e.getMessage());
+        }
+        JsonObject json = new JsonObject();
+        json.addProperty("success", true); // nếu cập nhật thành công
+        response.getWriter().write(json.toString());
     }
 
     /**

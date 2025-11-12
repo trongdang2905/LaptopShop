@@ -499,7 +499,7 @@
         <!-- Header -->
         <header class="header">
             <div class="header-container">
-                <div class="logo" onclick="window.location.href = '../laptop/product'">Group 5</div>
+                <div class="logo" onclick="window.location.href = 'product'">Group 5</div>
                 <div class="checkout-steps">
                     <div class="step">
                         <span class="step-number">✓</span>
@@ -524,132 +524,112 @@
                 <button class="back-button" onclick="window.location.href = 'cart.jsp'">← Quay lại</button>
                 <span>Thanh toán đơn hàng</span>
             </div>
-            <form action="../get-order" method="get">
-                <!-- Checkout Form -->
-                <div class="checkout-form">
-                    <!-- Customer Information -->
-                    <div class="form-section">
-                        <h2 class="section-title">
-                            <span class="section-icon">👤</span>
-                            Thông tin khách hàng
-                        </h2>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>Họ và tên <span class="required">*</span></label>
-                                <input type="text" id="fullName" value="${sessionScope.infoCustomer.fullName}" required>
-                            </div>
-                            <div class="form-group">
-                                <label>Số điện thoại <span class="required">*</span></label>
-                                <input type="tel" id="phone" value="${sessionScope.infoCustomer.phone}" required>
-                            </div>
+
+            <!-- Checkout Form -->
+            <div class="checkout-form">
+                <!-- Customer Information -->
+                <div class="form-section">
+                    <h2 class="section-title">
+                        <span class="section-icon">👤</span>
+                        Thông tin khách hàng
+                    </h2>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Họ và tên <span class="required">*</span></label>
+                            <input type="text" id="fullName" value="${sessionScope.infoCustomer.fullName}" required>
                         </div>
                         <div class="form-group">
-                            <label>Email <span class="required">*</span></label>
-                            <input type="email" id="email" value="${sessionScope.accountCustomer.userName}" required>
+                            <label>Số điện thoại <span class="required">*</span></label>
+                            <input type="tel" id="phone" value="${sessionScope.infoCustomer.phone}" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Email <span class="required">*</span></label>
+                        <input type="email" id="email" value="${sessionScope.accountCustomer.userName}" required>
+                    </div>
+                </div>
+
+                <!-- Shipping Address -->
+                <div class="form-section">
+                    <h2 class="section-title">
+                        <span class="section-icon">📍</span>
+                        Địa chỉ giao hàng
+                    </h2>
+
+                    <div class="form-group">
+                        <label>Địa chỉ cụ thể <span class="required">*</span></label>
+                        <input type="text" id="street" placeholder="Số nhà, tên đường" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Tỉnh/Thành phố <span class="required">*</span></label>
+                            <select id="city" required>
+                                <option value="">Chọn Tỉnh/Thành phố</option>
+                                <option value="Hà Nội">Hà Nội</option>
+                                <option value="TP Hồ Chí Minh">TP Hồ Chí Minh</option>
+                                <option value="Đà Nẵng">Đà Nẵng</option>
+                                <option value="Hải Phòng">Hải Phòng</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Quận/Huyện <span class="required">*</span></label>
+                            <select id="district" required>
+                                <option value="">Chọn Quận/Huyện</option>
+                            </select>
                         </div>
                     </div>
 
-                    <!-- Shipping Address -->
-                    <div class="form-section">
-                        <h2 class="section-title">
-                            <span class="section-icon">📍</span>
-                            Địa chỉ giao hàng
-                        </h2>
+                    <div class="form-group">
+                        <label>Ghi chú giao hàng</label>
+                        <textarea id="note" placeholder="Ví dụ: Giao hàng giờ hành chính"></textarea>
+                    </div>
+                </div>
 
-                        <c:if test="${not empty sessionScope.savedAddresses}">
-                            <c:forEach items="${sessionScope.savedAddresses}" var="address" varStatus="status">
-                                <div class="saved-address" onclick="selectAddress(${status.index})">
-                                    <input type="radio" name="address" id="addr${status.index}" ${status.index == 0 ? 'checked' : ''}>
-                                    <div class="address-info">
-                                        <div class="address-name">${address.name}</div>
-                                        <div class="address-details">
-                                            ${address.phone}<br>
-                                            ${address.street}, ${address.ward}, ${address.district}, ${address.city}
-                                        </div>
-                                    </div>
-                                </div>
-                            </c:forEach>
-                            <div class="add-new-address" onclick="showNewAddressForm()">
-                                + Thêm địa chỉ mới
-                            </div>
-                        </c:if>
+                <!-- Payment Method -->
+                <div class="form-section">
+                    <h2 class="section-title">
+                        <span class="section-icon">💳</span>
+                        Phương thức thanh toán
+                    </h2>
 
-                        <div id="newAddressForm" style="${empty sessionScope.savedAddresses ? 'display: block;' : 'display: none;'}">
-                            <div class="form-group">
-                                <label>Địa chỉ cụ thể <span class="required">*</span></label>
-                                <input type="text" id="street" name="address" placeholder="Số nhà, tên đường" required>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label>Tỉnh/Thành phố <span class="required">*</span></label>
-                                    <select id="city" name="city" required>
-                                        <option value="">Chọn Tỉnh/Thành phố</option>
-                                        <option value="Hà Nội">Hà Nội</option>
-                                        
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label>Quận/Huyện <span class="required">*</span></label>
-                                    <select id="district" name="district"required>
-                                        <option value="">Chọn Quận/Huyện</option>
-                                        <option value="hbt">Hai Bà Trưng</option>
-                                        <option value="dd">Đống Đa</option>
-                                    </select>
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label>Ghi chú giao hàng</label>
-                                <textarea id="note" name="note" placeholder="Ví dụ: Giao hàng giờ hành chính"></textarea>
-                            </div>
+                    <div class="payment-method selected" onclick="selectPayment('cod')">
+                        <input type="radio" name="payment" id="cod" checked>
+                        <span class="payment-icon">💵</span>
+                        <div class="payment-info">
+                            <div class="payment-name">Thanh toán khi nhận hàng (COD)</div>
+                            <div class="payment-desc">Thanh toán bằng tiền mặt khi nhận hàng</div>
                         </div>
                     </div>
 
-                    <!-- Payment Method -->
-                    <div class="form-section">
-                        <h2 class="section-title">
-                            <span class="section-icon">💳</span>
-                            Phương thức thanh toán
-                        </h2>
-
-                        <div class="payment-method selected" onclick="selectPayment('cod')">
-                            <input type="radio" name="payment" value="cod" id="cod" checked>
-                            <span class="payment-icon">💵</span>
-                            <div class="payment-info">
-                                <div class="payment-name">Thanh toán khi nhận hàng (COD)</div>
-                                <div class="payment-desc">Thanh toán bằng tiền mặt khi nhận hàng</div>
-                            </div>
+                    <div class="payment-method" onclick="selectPayment('bank')">
+                        <input type="radio" name="payment" id="bank">
+                        <span class="payment-icon">🏦</span>
+                        <div class="payment-info">
+                            <div class="payment-name">Chuyển khoản ngân hàng</div>
+                            <div class="payment-desc">Chuyển khoản qua VietQR hoặc số tài khoản</div>
                         </div>
+                    </div>
 
-                        <div class="payment-method" onclick="selectPayment('bank')">
-                            <input type="radio" name="payment" id="bank">
-                            <span class="payment-icon">🏦</span>
-                            <div class="payment-info">
-                                <div class="payment-name">Chuyển khoản ngân hàng</div>
-                                <div class="payment-desc">Chuyển khoản qua VietQR hoặc số tài khoản</div>
-                            </div>
+                    <div class="payment-method" onclick="selectPayment('card')">
+                        <input type="radio" name="payment" id="card">
+                        <span class="payment-icon">💳</span>
+                        <div class="payment-info">
+                            <div class="payment-name">Thẻ tín dụng/Ghi nợ</div>
+                            <div class="payment-desc">Visa, MasterCard, JCB</div>
                         </div>
+                    </div>
 
-                        <div class="payment-method" onclick="selectPayment('card')">
-                            <input type="radio" name="payment" id="card">
-                            <span class="payment-icon">💳</span>
-                            <div class="payment-info">
-                                <div class="payment-name">Thẻ tín dụng/Ghi nợ</div>
-                                <div class="payment-desc">Visa, MasterCard, JCB</div>
-                            </div>
-                        </div>
-
-                        <div class="payment-method" onclick="selectPayment('wallet')">
-                            <input type="radio" name="payment" id="wallet">
-                            <span class="payment-icon">📱</span>
-                            <div class="payment-info">
-                                <div class="payment-name">Ví điện tử</div>
-                                <div class="payment-desc">MoMo, ZaloPay, VNPay</div>
-                            </div>
+                    <div class="payment-method" onclick="selectPayment('wallet')">
+                        <input type="radio" name="payment" id="wallet">
+                        <span class="payment-icon">📱</span>
+                        <div class="payment-info">
+                            <div class="payment-name">Ví điện tử</div>
+                            <div class="payment-desc">MoMo, ZaloPay, VNPay</div>
                         </div>
                     </div>
                 </div>
-            </form>
+            </div>
+
             <!-- Order Summary -->
             <div class="order-summary">
                 <h3 class="summary-title">Đơn hàng của bạn</h3>
@@ -662,7 +642,7 @@
                             <div class="summary-item-name">${item.product.name}</div>
                             <div class="summary-item-quantity">Số lượng: ${item.quantity}</div>
                         </div>
-                        <div class="summary-item-price">${item.getFormattedPrice()}</div>
+                        <div class="summary-item-price">${item.getFormattedTotal()}</div>
                     </div>
                 </c:forEach>
 
@@ -710,48 +690,6 @@
         </div>
 
         <script>
-            function selectAddress(index) {
-                document.getElementById('addr' + index).checked = true;
-                document.querySelectorAll('.saved-address').forEach((el, i) => {
-                    el.classList.toggle('selected', i === index);
-                });
-            }
-
-            function showNewAddressForm() {
-                document.getElementById('newAddressForm').style.display = 'block';
-            }
-
-            function selectPayment(method) {
-                document.getElementById(method).checked = true;
-                document.querySelectorAll('.payment-method').forEach(el => {
-                    el.classList.remove('selected');
-                });
-                event.currentTarget.classList.add('selected');
-            }
-
-            function applyPromo() {
-                const promoCode = document.getElementById('promoCode').value.trim();
-                if (promoCode === '') {
-                    alert('Vui lòng nhập mã giảm giá');
-                    return;
-                }
-
-                fetch(`apply-promo?code=${promoCode}`, {
-                    method: 'GET'
-                })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                alert('Áp dụng mã giảm giá thành công!');
-                                // Update discount and total
-                                document.getElementById('discountAmount').textContent = '-' + data.discount;
-                                document.getElementById('totalAmount').textContent = data.total;
-                            } else {
-                                alert('Mã giảm giá không hợp lệ');
-                            }
-                        });
-            }
-
             function placeOrder() {
                 // Validate form
                 const fullName = document.getElementById('fullName').value.trim();
@@ -763,81 +701,114 @@
                     return;
                 }
 
-                // Check if address is selected or filled
-                const addressSelected = document.querySelector('input[name="address"]:checked');
-                const newAddressVisible = document.getElementById('newAddressForm').style.display !== 'none';
+                // Get address information
+                const street = document.getElementById('street').value.trim();
+                const city = document.getElementById('city').value;
+                const district = document.getElementById('district').value;
+                const note = document.getElementById('note').value.trim();
 
-                if (!addressSelected && newAddressVisible) {
-                    const street = document.getElementById('street').value.trim();
-                    const city = document.getElementById('city').value;
-                    const district = document.getElementById('district').value;
-                    const ward = document.getElementById('ward').value;
-
-                    if (!street || !city || !district || !ward) {
-                        alert('Vui lòng điền đầy đủ địa chỉ giao hàng');
-                        return;
-                    }
+                if (!street || !city || !district) {
+                    alert('Vui lòng điền đầy đủ địa chỉ giao hàng');
+                    return;
                 }
 
                 // Get payment method
-                const paymentMethod = document.querySelector('input[name="payment"]:checked').id;
+                const paymentMethod = document.querySelector('input[name="payment"]:checked');
+                if (!paymentMethod) {
+                    alert('Vui lòng chọn phương thức thanh toán');
+                    return;
+                }
 
                 // Prepare order data
                 const orderData = {
                     fullName: fullName,
                     phone: phone,
                     email: email,
-                    paymentMethod: paymentMethod
-                };
+                    address: {
+                        street: street,
+                        district: district,
+                        city: city,
+                        note: note,
+                        fullAddress: `${street}, ${district}, ${city}`
+                                    },
+                                    paymentMethod: paymentMethod.id
+                                };
 
-                // Submit order
-                fetch('place-order', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(orderData)
-                })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                alert('Đặt hàng thành công!');
-                                window.location.href = 'order-success.jsp?orderId=' + data.orderId;
-                            } else {
-                                alert('Đặt hàng thất bại: ' + data.message);
+                                // Submit order
+                                fetch('${pageContext.request.contextPath}/get-order', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify(orderData)
+                                })
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            if (data.success) {
+                                                alert('Đặt hàng thành công!');
+                                                window.location.href = 'customer/bill.jsp';
+                                            } else {
+                                                alert('Đặt hàng thất bại: ' + data.message);
+                                            }
+                                        })
+                                        .catch(error => {
+                                            console.error('Error:', error);
+                                            alert('Có lỗi xảy ra. Vui lòng thử lại!');
+                                        });
                             }
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
-                            alert('Có lỗi xảy ra. Vui lòng thử lại!');
-                        });
-            }
 
-            // Update district options when city changes
-            document.getElementById('city')?.addEventListener('change', function () {
-                const districtSelect = document.getElementById('district');
-                districtSelect.innerHTML = '<option value="">Chọn Quận/Huyện</option>';
+                            function selectPayment(method) {
+                                document.getElementById(method).checked = true;
+                                document.querySelectorAll('.payment-method').forEach(el => {
+                                    el.classList.remove('selected');
+                                });
+                                event.currentTarget.classList.add('selected');
+                            }
 
-                // Add districts based on selected city (sample data)
-                if (this.value === 'Hà Nội') {
-                    ['Ba Đình', 'Hoàn Kiếm', 'Đống Đa', 'Hai Bà Trưng', 'Cầu Giấy', 'Thanh Xuân'].forEach(d => {
-                        districtSelect.innerHTML += `<option value="${d}">${d}</option>`;
-                    });
-                }
-            });
+                            function applyPromo() {
+                                const promoCode = document.getElementById('promoCode').value.trim();
+                                if (promoCode === '') {
+                                    alert('Vui lòng nhập mã giảm giá');
+                                    return;
+                                }
 
-            // Update ward options when district changes
-            document.getElementById('district')?.addEventListener('change', function () {
-                const wardSelect = document.getElementById('ward');
-                wardSelect.innerHTML = '<option value="">Chọn Phường/Xã</option>';
+                                fetch(`apply-promo?code=${promoCode}`, {
+                                    method: 'GET'
+                                })
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            if (data.success) {
+                                                alert('Áp dụng mã giảm giá thành công!');
+                                                // Update discount and total
+                                                document.getElementById('discountAmount').textContent = '-' + data.discount;
+                                                document.getElementById('totalAmount').textContent = data.total;
+                                            } else {
+                                                alert('Mã giảm giá không hợp lệ');
+                                            }
+                                        });
+                            }
 
-                // Add wards based on selected district (sample data)
-                if (this.value) {
-                    ['Phường 1', 'Phường 2', 'Phường 3', 'Phường 4'].forEach(w => {
-                        wardSelect.innerHTML += `<option value="${w}">${w}</option>`;
-                    });
-                }
-            });
+                            document.getElementById('city')?.addEventListener('change', function () {
+                                const districtSelect = document.getElementById('district');
+                                districtSelect.innerHTML = '<option value="">Chọn Quận/Huyện</option>';
+
+                                const city = this.value;
+                                let districts = [];
+
+                                if (city === 'Hà Nội') {
+                                    districts = ['Ba Đình', 'Hoàn Kiếm', 'Đống Đa', 'Hai Bà Trưng', 'Cầu Giấy', 'Thanh Xuân'];
+                                } else if (city === 'TP Hồ Chí Minh') {
+                                    districts = ['Quận 1', 'Quận 3', 'Quận 4', 'Quận 5', 'Phú Nhuận', 'Bình Thạnh'];
+                                } else if (city === 'Đà Nẵng') {
+                                    districts = ['Hải Châu', 'Thanh Khê', 'Cẩm Lệ', 'Sơn Trà', 'Liên Chiểu'];
+                                }
+
+                                districts.forEach(d => {
+                                    districtSelect.innerHTML += '<option value="' + d + '">' + d + '</option>';
+                                });
+                            });
+
+                            ;
         </script>
     </body>
 </html>

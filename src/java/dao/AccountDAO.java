@@ -31,5 +31,19 @@ public class AccountDAO extends DBContext {
         return null;
     }
     
+    public Account getAccountByID(int id) {
+        String sql = "select * from Account where AccountID = ?";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, id);
+            ResultSet rs = st.executeQuery();
+            if (rs.next()) {
+                Account a = new Account(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getInt(4), rs.getBoolean(5), rs.getTimestamp(6));
+                return a;
+            }
+        } catch (SQLException e) {
+        }
+        return null;
+    }
     
 }

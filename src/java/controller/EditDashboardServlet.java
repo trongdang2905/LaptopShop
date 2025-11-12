@@ -70,7 +70,7 @@ public class EditDashboardServlet extends HttpServlet {
             int id = Integer.parseInt(id_raw);
             Product p = dao.getProductByID(id);
             request.setAttribute("product", p);
-            request.getRequestDispatcher("dashboard-update-product.jsp").forward(request, response);
+            request.getRequestDispatcher("/admin/dashboard-update-product.jsp").forward(request, response);
         } catch (NumberFormatException e) {
             e.printStackTrace();
         }

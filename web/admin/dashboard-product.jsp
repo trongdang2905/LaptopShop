@@ -448,19 +448,19 @@
             </div>
             <ul class="nav-menu">
                 <li class="nav-item">
-                    <a href="admin/dashboard.jsp" class="nav-link">
+                    <a href="dashboard.jsp" class="nav-link">
                         <span>📊</span>
                         <span>Dashboard</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="admin/dashboard-product" class="nav-link active">
+                    <a href="../dashboard-product" class="nav-link active">
                         <span>💼</span>
                         <span>Products</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="employee-handle" class="nav-link">
                         <span>🛒</span>
                         <span>Orders</span>
                     </a>
@@ -472,14 +472,15 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <span>📈</span>
-                        <span>Analytics</span>
+                    <a href="admin/register-employee.jsp" class="nav-link">
+                        <span>👔</span>
+                        <span>Employees</span>
                     </a>
                 </li>
+
                 <li class="nav-item">
                     <a href="../logout" class="nav-link">
-                        <span>⚙️</span>
+                        <span>🚪️</span>
                         <span>Logout</span>
                     </a>
                 </li>
@@ -497,7 +498,7 @@
                         <span class="search-icon">🔍</span>
                         <input type="text" id="searchInput" placeholder="Search products..." onkeypress="handleSearch(event)">
                     </div>
-                    <a href="admin/dashboard-add-product.jsp" class="btn btn-primary">+ Add Product</a>
+                    <a href="dashboard-add-product.jsp" class="btn btn-primary">+ Add Product</a>
                 </div>
             </div>
 
@@ -545,8 +546,8 @@
 
                                 <td>
                                     <div class="actions-cell">
-                                        <a href="edit-product?id=${c.productID}" class="btn btn-icon btn-secondary" title="Edit">✏️</a>
-                                        <a href="delete-product?id=${c.productID}" class="btn btn-icon btn-danger" title="Delete" onclick="return confirm('Are you sure you want to delete this product?')">🗑️</a>
+                                        <a href="/laptop/edit-product?id=${c.productID}" class="btn btn-icon btn-secondary" title="Edit">✏️</a>
+                                        <a href="/laptop/delete-product?id=${c.productID}" class="btn btn-icon btn-danger" title="Delete" onclick="return confirm('Are you sure you want to delete this product?')">🗑️</a>
                                     </div>
                                 </td>
                             </tr>

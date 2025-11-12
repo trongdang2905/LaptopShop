@@ -4,12 +4,6 @@
     Author     : trong
 --%>
 
-<%-- 
-    Document   : employee-orders
-    Created on : Nov 03, 2025
-    Author     : trong
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
@@ -213,11 +207,15 @@
                 background: linear-gradient(135deg, #f59e0b, #d97706);
             }
 
-            .icon-processing {
+            .icon-confirmed {
                 background: linear-gradient(135deg, #3b82f6, #2563eb);
             }
 
-            .icon-completed {
+            .icon-shipping {
+                background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            }
+
+            .icon-delivered {
                 background: linear-gradient(135deg, #10b981, #059669);
             }
 
@@ -396,12 +394,17 @@
                 color: #f59e0b;
             }
 
-            .status-processing {
+            .status-confirmed {
                 background: rgba(59, 130, 246, 0.1);
                 color: #3b82f6;
             }
 
-            .status-completed {
+            .status-shipping {
+                background: rgba(139, 92, 246, 0.1);
+                color: #8b5cf6;
+            }
+
+            .status-delivered {
                 background: rgba(16, 185, 129, 0.1);
                 color: #10b981;
             }
@@ -409,6 +412,82 @@
             .status-cancelled {
                 background: rgba(239, 68, 68, 0.1);
                 color: #ef4444;
+            }
+
+            .action-dropdown {
+                position: relative;
+                display: inline-block;
+            }
+
+            .dropdown-btn {
+                padding: 8px 16px;
+                border-radius: 8px;
+                font-size: 13px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s;
+                border: none;
+                background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+                color: white;
+            }
+
+            .dropdown-btn:hover {
+                box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+                transform: translateY(-2px);
+            }
+
+            .dropdown-content {
+                display: none;
+                position: absolute;
+                right: 0;
+                background: #1e293b;
+                min-width: 180px;
+                box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+                z-index: 1;
+                border-radius: 12px;
+                overflow: hidden;
+                border: 1px solid rgba(148, 163, 184, 0.2);
+                margin-top: 5px;
+            }
+
+            .dropdown-content.show {
+                display: block;
+            }
+
+            .dropdown-item {
+                color: #e2e8f0;
+                padding: 12px 16px;
+                text-decoration: none;
+                display: block;
+                transition: all 0.2s;
+                cursor: pointer;
+                font-size: 13px;
+                font-weight: 500;
+            }
+
+            .dropdown-item:hover {
+                background: rgba(59, 130, 246, 0.1);
+                color: #3b82f6;
+            }
+
+            .dropdown-item.pending {
+                border-left: 3px solid #f59e0b;
+            }
+
+            .dropdown-item.confirmed {
+                border-left: 3px solid #3b82f6;
+            }
+
+            .dropdown-item.shipping {
+                border-left: 3px solid #8b5cf6;
+            }
+
+            .dropdown-item.delivered {
+                border-left: 3px solid #10b981;
+            }
+
+            .dropdown-item.cancelled {
+                border-left: 3px solid #ef4444;
             }
 
             .action-btn {
@@ -429,53 +508,6 @@
 
             .btn-view:hover {
                 background: rgba(59, 130, 246, 0.2);
-            }
-
-            .btn-process {
-                background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-                color: white;
-            }
-
-            .btn-process:hover {
-                box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
-                transform: translateY(-2px);
-            }
-
-            .btn-complete {
-                background: linear-gradient(135deg, #10b981, #059669);
-                color: white;
-            }
-
-            .btn-complete:hover {
-                box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
-                transform: translateY(-2px);
-            }
-
-            .pagination {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                gap: 10px;
-                margin-top: 30px;
-            }
-
-            .page-btn {
-                width: 40px;
-                height: 40px;
-                border-radius: 10px;
-                background: rgba(30, 41, 59, 0.8);
-                border: 1px solid rgba(148, 163, 184, 0.2);
-                color: #e2e8f0;
-                font-weight: 600;
-                cursor: pointer;
-                transition: all 0.3s;
-            }
-
-            .page-btn:hover,
-            .page-btn.active {
-                background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-                border-color: transparent;
-                color: white;
             }
 
             .modal {
@@ -564,22 +596,6 @@
                 margin-bottom: 10px;
             }
 
-            .modal-actions {
-                display: flex;
-                gap: 10px;
-                margin-top: 30px;
-            }
-
-            .modal-actions button {
-                flex: 1;
-                padding: 14px;
-                border-radius: 12px;
-                font-weight: 600;
-                cursor: pointer;
-                transition: all 0.3s;
-                border: none;
-            }
-
             @media (max-width: 1200px) {
                 .orders-table {
                     font-size: 13px;
@@ -618,6 +634,11 @@
                     padding: 25px;
                 }
             }
+
+            .loading {
+                pointer-events: none;
+                opacity: 0.6;
+            }
         </style>
     </head>
     <body>
@@ -640,7 +661,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="../logout" class="nav-link" onclick="logout()">
+                    <a href="logout" class="nav-link">
                         <span>🚪</span>
                         <span>Logout</span>
                     </a>
@@ -663,25 +684,25 @@
                 <div class="stat-card">
                     <div class="stat-icon icon-pending">⏳</div>
                     <div class="stat-label">Pending Orders</div>
-                    <div class="stat-value">24</div>
+                    <div class="stat-value" id="stat-pending">0</div>
                 </div>
 
                 <div class="stat-card">
-                    <div class="stat-icon icon-processing">⚙️</div>
-                    <div class="stat-label">Processing</div>
-                    <div class="stat-value">18</div>
+                    <div class="stat-icon icon-confirmed">✓</div>
+                    <div class="stat-label">Confirmed</div>
+                    <div class="stat-value" id="stat-confirmed">0</div>
                 </div>
 
                 <div class="stat-card">
-                    <div class="stat-icon icon-completed">✅</div>
-                    <div class="stat-label">Completed Today</div>
-                    <div class="stat-value">42</div>
+                    <div class="stat-icon icon-shipping">🚚</div>
+                    <div class="stat-label">Shipping</div>
+                    <div class="stat-value" id="stat-shipping">0</div>
                 </div>
 
                 <div class="stat-card">
-                    <div class="stat-icon icon-cancelled">❌</div>
-                    <div class="stat-label">Cancelled</div>
-                    <div class="stat-value">3</div>
+                    <div class="stat-icon icon-delivered">✅</div>
+                    <div class="stat-label">Delivered</div>
+                    <div class="stat-value" id="stat-delivered">0</div>
                 </div>
             </div>
 
@@ -691,8 +712,9 @@
                     <div class="filters">
                         <button class="filter-btn active" onclick="filterOrders('all')">All</button>
                         <button class="filter-btn" onclick="filterOrders('pending')">Pending</button>
-                        <button class="filter-btn" onclick="filterOrders('processing')">Processing</button>
-                        <button class="filter-btn" onclick="filterOrders('completed')">Completed</button>
+                        <button class="filter-btn" onclick="filterOrders('confirmed')">Confirmed</button>
+                        <button class="filter-btn" onclick="filterOrders('shipping')">Shipping</button>
+                        <button class="filter-btn" onclick="filterOrders('delivered')">Delivered</button>
                         <button class="filter-btn" onclick="filterOrders('cancelled')">Cancelled</button>
                     </div>
                 </div>
@@ -717,90 +739,54 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td><span class="order-id">#ORD-2025-001</span></td>
-                            <td>
-                                <div class="customer-name">Nguyen Van A</div>
-                                <div class="customer-email">nguyenvana@email.com</div>
-                            </td>
-                            <td>ASUS TUF Gaming F16 (+1 more)</td>
-                            <td><span class="order-amount">₫23,980,000</span></td>
-                            <td>Nov 03, 2025</td>
-                            <td><span class="status-badge status-pending">Pending</span></td>
-                            <td>
-                                <button class="action-btn btn-view" onclick="viewOrder(1)">👁️ View</button>
-                                <button class="action-btn btn-process" onclick="processOrder(1)">▶️ Process</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><span class="order-id">#ORD-2025-002</span></td>
-                            <td>
-                                <div class="customer-name">Tran Thi B</div>
-                                <div class="customer-email">tranthib@email.com</div>
-                            </td>
-                            <td>Acer Gaming Aspire 7</td>
-                            <td><span class="order-amount">₫18,990,000</span></td>
-                            <td>Nov 03, 2025</td>
-                            <td><span class="status-badge status-processing">Processing</span></td>
-                            <td>
-                                <button class="action-btn btn-view" onclick="viewOrder(2)">👁️ View</button>
-                                <button class="action-btn btn-complete" onclick="completeOrder(2)">✅ Complete</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><span class="order-id">#ORD-2025-003</span></td>
-                            <td>
-                                <div class="customer-name">Le Van C</div>
-                                <div class="customer-email">levanc@email.com</div>
-                            </td>
-                            <td>HP 14-EP0112TU</td>
-                            <td><span class="order-amount">₫15,290,000</span></td>
-                            <td>Nov 02, 2025</td>
-                            <td><span class="status-badge status-completed">Completed</span></td>
-                            <td>
-                                <button class="action-btn btn-view" onclick="viewOrder(3)">👁️ View</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><span class="order-id">#ORD-2025-004</span></td>
-                            <td>
-                                <div class="customer-name">Pham Thi D</div>
-                                <div class="customer-email">phamthid@email.com</div>
-                            </td>
-                            <td>Acer Aspire Lite 16 AI</td>
-                            <td><span class="order-amount">₫13,790,000</span></td>
-                            <td>Nov 02, 2025</td>
-                            <td><span class="status-badge status-pending">Pending</span></td>
-                            <td>
-                                <button class="action-btn btn-view" onclick="viewOrder(4)">👁️ View</button>
-                                <button class="action-btn btn-process" onclick="processOrder(4)">▶️ Process</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><span class="order-id">#ORD-2025-005</span></td>
-                            <td>
-                                <div class="customer-name">Hoang Van E</div>
-                                <div class="customer-email">hoangvane@email.com</div>
-                            </td>
-                            <td>ASUS ROG Strix G16</td>
-                            <td><span class="order-amount">₫32,490,000</span></td>
-                            <td>Nov 01, 2025</td>
-                            <td><span class="status-badge status-cancelled">Cancelled</span></td>
-                            <td>
-                                <button class="action-btn btn-view" onclick="viewOrder(5)">👁️ View</button>
-                            </td>
-                        </tr>
+                        <c:forEach items="${orders}" var="handleOrders">
+                            <tr data-status="${handleOrders.status}">
+                                <td><span class="order-id">#${handleOrders.order.orderID}</span></td>
+                                <td>
+                                    <div class="customer-name">${handleOrders.order.customer.fullName}</div>
+                                    <div class="customer-email">${handleOrders.order.customer.email}</div>
+                                </td>
+                                <td>
+                                    <c:forEach items="${handleOrders.product}" var="product" varStatus="status">
+                                        ${product.name}<c:if test="${!status.last}">, </c:if>
+                                    </c:forEach>
+                                </td>
+                                <td><span class="order-amount">${handleOrders.getFormattedPrice()}</span></td>
+                                <td>${handleOrders.order.orderDate}</td>
+                                <td>
+                                    <span class="status-badge status-${handleOrders.status.toLowerCase()}">
+                                        ${handleOrders.status}
+                                    </span>
+                                </td>
+                                <td>
+                                    <button class="action-btn btn-view" onclick="viewOrder(${handleOrders.order.orderID})">👁️ View</button>
+                                    <div class="action-dropdown">
+                                        <button class="dropdown-btn" onclick="toggleDropdown(event, ${handleOrders.order.orderID})">
+                                            ⚙️ Change Status
+                                        </button>
+                                        <div class="dropdown-content" id="dropdown-${handleOrders.order.orderID}">
+                                            <div class="dropdown-item pending" onclick="updateOrderStatus(${handleOrders.order.orderID}, 'Pending')">
+                                                ⏳ Pending
+                                            </div>
+                                            <div class="dropdown-item confirmed" onclick="updateOrderStatus(${handleOrders.order.orderID}, 'Confirmed')">
+                                                ✓ Confirmed
+                                            </div>
+                                            <div class="dropdown-item shipping" onclick="updateOrderStatus(${handleOrders.order.orderID}, 'Shipping')">
+                                                🚚 Shipping
+                                            </div>
+                                            <div class="dropdown-item delivered" onclick="updateOrderStatus(${handleOrders.order.orderID}, 'Delivered')">
+                                                ✅ Delivered
+                                            </div>
+                                            <div class="dropdown-item cancelled" onclick="updateOrderStatus(${handleOrders.order.orderID}, 'Cancelled')">
+                                                ❌ Cancelled
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </c:forEach>
                     </tbody>
                 </table>
-
-                <div class="pagination">
-                    <button class="page-btn">«</button>
-                    <button class="page-btn active">1</button>
-                    <button class="page-btn">2</button>
-                    <button class="page-btn">3</button>
-                    <button class="page-btn">4</button>
-                    <button class="page-btn">»</button>
-                </div>
             </div>
         </main>
 
@@ -819,156 +805,249 @@
 
                 <div class="order-detail-section">
                     <div class="detail-label">Customer Information</div>
-                    <div class="detail-value" id="modalCustomerName">Nguyen Van A</div>
-                    <div class="customer-email" id="modalCustomerEmail">nguyenvana@email.com</div>
+                    <div class="detail-value" id="modalCustomerName">Customer Name</div>
+                    <div class="customer-email" id="modalCustomerEmail">customer@email.com</div>
                     <div class="customer-email" id="modalCustomerPhone">+84 123 456 789</div>
                 </div>
 
                 <div class="order-detail-section">
                     <div class="detail-label">Delivery Address</div>
-                    <div class="detail-value" id="modalAddress">123 Nguyen Hue Street, District 1, Ho Chi Minh City</div>
+                    <div class="detail-value" id="modalAddress">Delivery address</div>
                 </div>
 
                 <div class="order-detail-section">
                     <div class="detail-label">Order Items</div>
                     <ul class="order-items" id="modalOrderItems">
-                        <li class="order-item">
-                            <div>
-                                <div class="customer-name">ASUS TUF Gaming F16 FX607VU</div>
-                                <div class="customer-email">Quantity: 1</div>
-                            </div>
-                            <div class="order-amount">₫21,490,000</div>
-                        </li>
-                        <li class="order-item">
-                            <div>
-                                <div class="customer-name">Gaming Mouse</div>
-                                <div class="customer-email">Quantity: 1</div>
-                            </div>
-                            <div class="order-amount">₫2,490,000</div>
-                        </li>
                     </ul>
                 </div>
 
                 <div class="order-detail-section">
                     <div class="detail-label">Total Amount</div>
-                    <div class="order-amount" style="font-size: 24px;" id="modalTotal">₫23,980,000</div>
+                    <div class="order-amount" style="font-size: 24px;" id="modalTotal">₫0</div>
                 </div>
 
                 <div class="order-detail-section">
                     <div class="detail-label">Status</div>
                     <span class="status-badge status-pending" id="modalStatus">Pending</span>
                 </div>
-
-                <div class="modal-actions">
-                    <button class="btn-process" style="flex: 1; padding: 14px; border-radius: 12px;" onclick="processOrderFromModal()">Process Order</button>
-                    <button class="btn-complete" style="flex: 1; padding: 14px; border-radius: 12px;" onclick="completeOrderFromModal()">Mark as Complete</button>
-                </div>
             </div>
         </div>
 
-    </body>
-    <script>
-        function logout() {
-            if (confirm('Are you sure you want to logout?')) {
-                window.location.href = 'logout.jsp'; // Or your logout endpoint
+        <script>
+            // Get employee email from session
+            const employeeEmail = '${sessionScope.infoEmployee.email}';
+            // Calculate statistics on page load
+            document.addEventListener('DOMContentLoaded', function () {
+                calculateStats();
+            });
+            function calculateStats() {
+                const rows = document.querySelectorAll('.orders-table tbody tr');
+                const stats = {
+                    pending: 0,
+                    confirmed: 0,
+                    shipping: 0,
+                    delivered: 0,
+                    cancelled: 0
+                };
+                rows.forEach(row => {
+                    const status = row.getAttribute('data-status').toLowerCase();
+                    if (stats.hasOwnProperty(status)) {
+                        stats[status]++;
+                    }
+                });
+                document.getElementById('stat-pending').textContent = stats.pending;
+                document.getElementById('stat-confirmed').textContent = stats.confirmed;
+                document.getElementById('stat-shipping').textContent = stats.shipping;
+                document.getElementById('stat-delivered').textContent = stats.delivered;
             }
-        }
 
-        function refreshOrders() {
-            location.reload();
-        }
+            function toggleDropdown(event, orderId) {
+                event.stopPropagation();
+                const dropdown = document.getElementById('dropdown-' + orderId);
+                // Close all other dropdowns
+                document.querySelectorAll('.dropdown-content').forEach(d => {
+                    if (d !== dropdown) {
+                        d.classList.remove('show');
+                    }
+                });
+                dropdown.classList.toggle('show');
+            }
 
-        function filterOrders(status) {
-            // Remove active class from all filter buttons
-            const filterBtns = document.querySelectorAll('.filter-btn');
-            filterBtns.forEach(btn => btn.classList.remove('active'));
+            // Close dropdowns when clicking outside
+            window.onclick = function (event) {
+                if (!event.target.matches('.dropdown-btn')) {
+                    document.querySelectorAll('.dropdown-content').forEach(dropdown => {
+                        dropdown.classList.remove('show');
+                    });
+                }
 
-            // Add active class to clicked button
-            event.target.classList.add('active');
+                const modal = document.getElementById('orderModal');
+                if (event.target === modal) {
+                    closeModal();
+                }
+            }
 
-            // Get all table rows
-            const rows = document.querySelectorAll('.orders-table tbody tr');
+            function updateOrderStatus(orderId, newStatus) {
+                if (!confirm(`Are you sure you want to change this order to ${newStatus} status?`)) {
+                    return;
+                }
 
-            rows.forEach(row => {
-                if (status === 'all') {
-                    row.style.display = '';
-                } else {
-                    const statusBadge = row.querySelector('.status-badge');
-                    const rowStatus = statusBadge.textContent.toLowerCase().trim();
+                // Get current date
+                const now = new Date();
+                const updateDate = now.toISOString().slice(0, 19).replace('T', ' ');
+                // Prepare data to send
+                const data = {
+                    orderId: orderId,
+                    status: newStatus,
+                    employeeEmail: employeeEmail,
+                    updateAt: updateDate
+                };
+                // Show loading state
+                const row = document.querySelector(`tr:has(#dropdown-${orderId})`);
+                if (row) {
+                    row.classList.add('loading');
+                }
 
-                    if (rowStatus === status) {
+                // Send fetch request to servlet
+                fetch('updateOrder', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                })
+                        .then(response => response.json())
+                        .then(result => {
+                            if (result.success) {
+                                alert(`Order #${orderId} has been updated to ${newStatus}`);
+                                window.location.href = 'employee-handle';
+                                // Update the status badge in the table
+                                const statusBadge = row.querySelector('.status-badge');
+                                statusBadge.className = `status-badge status-${newStatus.toLowerCase()}`;
+                                statusBadge.textContent = newStatus;
+
+                                // Update data-status attribute
+                                row.setAttribute('data-status', newStatus);
+
+                                // Recalculate statistics
+                                calculateStats();
+
+                                // Close dropdown
+                                document.getElementById(`dropdown-${orderId}`).classList.remove('show');
+
+                            } else {
+                                alert('Failed to update order status: ' + (result.message || 'Unknown error'));
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+//                            alert('An error occurred while updating the order status. Please try again.');
+                        })
+                        .finally(() => {
+                            // Remove loading state
+                            if (row) {
+                                row.classList.remove('loading');
+                            }
+                        });
+            }
+
+            function viewOrder(orderId) {
+                // Find the order row
+                const row = document.querySelector(`tr[data-status]:has(.order-id:contains('#${orderId}'))`);
+                if (!row) {
+                    alert('Order not found');
+                    return;
+                }
+
+                // Extract order information from the row
+                const cells = row.querySelectorAll('td');
+                const orderIdText = cells[0].textContent.trim();
+                const customerName = cells[1].querySelector('.customer-name').textContent;
+                const customerEmail = cells[1].querySelector('.customer-email').textContent;
+                const products = cells[2].textContent.trim();
+                const amount = cells[3].textContent.trim();
+                const orderDate = cells[4].textContent.trim();
+                const status = cells[5].querySelector('.status-badge').textContent.trim();
+
+                // Populate modal
+                document.getElementById('modalOrderId').textContent = orderIdText;
+                document.getElementById('modalCustomerName').textContent = customerName;
+                document.getElementById('modalCustomerEmail').textContent = customerEmail;
+                document.getElementById('modalCustomerPhone').textContent = 'N/A'; // Not available in table
+                document.getElementById('modalAddress').textContent = 'Not available in current view';
+                document.getElementById('modalTotal').textContent = amount;
+
+                // Update status badge
+                const modalStatus = document.getElementById('modalStatus');
+                modalStatus.className = `status-badge status-${status.toLowerCase()}`;
+                modalStatus.textContent = status;
+
+                // Parse and display order items
+                const orderItemsList = document.getElementById('modalOrderItems');
+                orderItemsList.innerHTML = '';
+                const productList = products.split(',').map(p => p.trim());
+                productList.forEach(product => {
+                    const li = document.createElement('li');
+                    li.className = 'order-item';
+                    li.innerHTML = `
+                        <span>${product}</span>
+                        <span>Quantity: 1</span>
+                    `;
+                    orderItemsList.appendChild(li);
+                });
+
+                // Show modal
+                document.getElementById('orderModal').classList.add('active');
+            }
+
+            function closeModal() {
+                document.getElementById('orderModal').classList.remove('active');
+            }
+
+            function filterOrders(status) {
+                const rows = document.querySelectorAll('.orders-table tbody tr');
+                const filterBtns = document.querySelectorAll('.filter-btn');
+
+                // Update active filter button
+                filterBtns.forEach(btn => btn.classList.remove('active'));
+                event.target.classList.add('active');
+
+                // Filter rows
+                rows.forEach(row => {
+                    const rowStatus = row.getAttribute('data-status').toLowerCase();
+                    if (status === 'all' || rowStatus === status) {
                         row.style.display = '';
                     } else {
                         row.style.display = 'none';
                     }
-                }
-            });
-        }
+                });
+            }
 
-        function searchOrders() {
-            const input = document.getElementById('searchInput');
-            const filter = input.value.toLowerCase();
-            const rows = document.querySelectorAll('.orders-table tbody tr');
+            function searchOrders() {
+                const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+                const rows = document.querySelectorAll('.orders-table tbody tr');
 
-            rows.forEach(row => {
-                const orderId = row.querySelector('.order-id').textContent.toLowerCase();
-                const customerName = row.querySelector('.customer-name').textContent.toLowerCase();
+                rows.forEach(row => {
+                    const orderId = row.querySelector('.order-id').textContent.toLowerCase();
+                    const customerName = row.querySelector('.customer-name').textContent.toLowerCase();
 
-                if (orderId.includes(filter) || customerName.includes(filter)) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
-            });
-        }
+                    if (orderId.includes(searchTerm) || customerName.includes(searchTerm)) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            }
 
-        function viewOrder(orderId) {
-            document.getElementById('orderModal').classList.add('active');
-        }
-
-        function closeModal() {
-            document.getElementById('orderModal').classList.remove('active');
-        }
-
-        function processOrder(orderId) {
-            if (confirm('Are you sure you want to process this order?')) {
-                alert('Order #' + orderId + ' has been moved to Processing status.');
+            function refreshOrders() {
                 location.reload();
             }
-        }
 
-        function completeOrder(orderId) {
-            if (confirm('Are you sure this order is completed?')) {
-                alert('Order #' + orderId + ' has been marked as Completed.');
-                location.reload();
+            // Helper function for contains selector (for older browsers)
+            if (!Element.prototype.matches) {
+                Element.prototype.matches = Element.prototype.msMatchesSelector ||
+                        Element.prototype.webkitMatchesSelector;
             }
-        }
-
-        function processOrderFromModal() {
-            closeModal();
-            alert('Order has been moved to Processing status.');
-        }
-
-        function completeOrderFromModal() {
-            closeModal();
-            alert('Order has been marked as Completed.');
-            location.reload();
-        }
-
-        // Close modal when clicking outside
-        window.onclick = function (event) {
-            const modal = document.getElementById('orderModal');
-            if (event.target === modal) {
-                closeModal();
-            }
-        }
-
-        // Close modal with Escape key
-        document.addEventListener('keydown', function (event) {
-            if (event.key === 'Escape') {
-                closeModal();
-            }
-        });
-    </script>
+        </script>
+    </body>
 </html>
-
